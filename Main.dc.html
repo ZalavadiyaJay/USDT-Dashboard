@@ -1,0 +1,1256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dashboard</title>
+<script src="./auth-guard.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="./firebase-service.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div style="font-family: 'Inter', system-ui, sans-serif; background: #F8FAFC; color: #0F172A; display: flex; flex-wrap: wrap">
+
+<aside style="position: sticky; top: 0; height: 100vh; overflow-y: auto; align-self: flex-start; flex: 0 0 248px; width: 248px; max-width: 248px; background: #FFFFFF; border-right: 1px solid #E2E8F0; padding: 24px 16px; display: flex; flex-direction: column; gap: 28px; z-index: 50;">
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 8px">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect width="24" height="24" rx="7" fill="#0F766E"></rect><path d="M12 4.5l6.5 3.75v7.5L12 19.5l-6.5-3.75v-7.5z" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"></path><path d="M9 10h6M12 10v5" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"></path></svg>
+<div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start">
+<div style="font-size: 15px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em">USDT Cloud Miner</div>
+<span style="font-size: 11px; font-weight: 600; color: #0F766E; background: #F0FDFA; border: 1px solid #99F6E4; border-radius: 999px; padding: 2px 8px">v1.2.0 Production</span>
+</div>
+</div>
+<nav aria-label="Main" style="display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #64748B; padding: 0 12px 8px">Admin console</div>
+
+<a href="index.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600; color: #115E59; background: #CCFBF1">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v7H3z M14 3h7v7h-7z M14 14h7v7h-7z M3 14h7v7H3z"></path></svg>
+<span>Dashboard</span>
+</a>
+
+<a class="nav-link" href="Users.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: #334155">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+<span>Users</span>
+</a>
+
+<a class="nav-link" href="Subscriptions.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: #334155">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18v12H3z M3 10h18"></path></svg>
+<span>Subscriptions</span>
+</a>
+
+<a class="nav-link" href="Withdrawals.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: #334155">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7 M7 7h10v10"></path></svg>
+<span>Withdrawals</span>
+<span style="margin-left: auto; font-size: 12px; font-weight: 700; color: #92400E; background: #FEF3C7; border-radius: 999px; padding: 2px 8px">1</span>
+</a>
+
+<a class="nav-link" href="Notifications.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: #334155">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9 M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+<span>Notifications</span>
+</a>
+
+<a class="nav-link" href="Settings.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: #334155">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7 M4 10V3 M12 21v-9 M12 8V3 M20 21v-5 M20 12V3 M1 14h6 M9 8h6 M17 16h6"></path></svg>
+<span>Settings</span>
+</a>
+</nav>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px; padding-top: 16px; border-top: 1px solid #E2E8F0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #F8FAFC; border: 1px solid #E2E8F0">
+<div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1">
+<div aria-hidden="true" style="flex: none; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 999px; background: #0F766E; color: #FFFFFF; font-size: 13px; font-weight: 700">ZJ</div>
+<div style="min-width: 0; flex: 1">
+<div style="font-size: 13px; font-weight: 600; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Jay Zalavadiya</div>
+<div style="font-size: 11px; color: #64748B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis" title="zalavadiyajay3814@gmail.com">zalavadiyajay3814@gmail.com</div>
+</div>
+</div>
+<button class="btn" data-action="logout" type="button" title="Sign out" aria-label="Sign out" style="flex: none; width: 36px; height: 36px; border-radius: 8px; border: 1px solid #E2E8F0; background: #FFFFFF; color: #DC2626; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+<polyline points="16 17 21 12 16 7"></polyline>
+<line x1="21" y1="12" x2="9" y2="12"></line>
+</svg>
+</button>
+</div>
+</div>
+</aside>
+
+<main style="flex: 999 1 560px; min-width: 0; padding: 24px 32px 40px; display: flex; flex-direction: column; gap: 24px">
+
+<section aria-label="Key numbers" style="border-radius: 20px; padding: 28px; background: linear-gradient(135deg, #0F766E 0%, #16B1A8 50%, #7DD3C7 100%); display: flex; flex-direction: column; gap: 24px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 10px 28px rgba(15, 118, 110, 0.14)">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div>
+<h1 style="margin: 0; font-size: 28px; line-height: 1.2; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF">Overview</h1>
+<p id="headerCurrentDate" style="margin: 6px 0 0; font-size: 14px; color: #CCFBF1">Sunday, 25 Oct 2026</p>
+</div>
+<div style="position: relative; display: inline-flex; align-items: center">
+<select id="headerDateRangeSelect" aria-label="Date range" style="height: 40px; padding: 0 38px 0 16px; border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 10px; background: rgba(6, 60, 56, 0.55); backdrop-filter: blur(12px); font-family: inherit; font-size: 13px; font-weight: 600; color: #FFFFFF; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1)">
+<option value="today" style="background: #0F766E; color: #FFFFFF">Today</option>
+<option value="yesterday" style="background: #0F766E; color: #FFFFFF">Yesterday</option>
+<option value="7d" selected="" style="background: #0F766E; color: #FFFFFF">Last 7 days</option>
+<option value="30d" style="background: #0F766E; color: #FFFFFF">Last 30 days</option>
+<option value="month" style="background: #0F766E; color: #FFFFFF">This month</option>
+<option value="custom" style="background: #0F766E; color: #FFFFFF">Custom range...</option>
+</select>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 14px; pointer-events: none"><path d="M6 9l6 6 6-6"></path></svg>
+
+<!-- Custom Date Range Popover -->
+<div id="customDateModal" style="display: none; position: absolute; right: 0; top: 48px; background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 12px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.18); z-index: 100; width: 310px; color: #0F172A">
+  <div style="font-size: 14px; font-weight: 700; color: #0F172A; margin-bottom: 12px">Select Custom Date Range</div>
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 600; color: #475569">
+      From Date
+      <input type="date" id="customStartDate" value="2026-10-18" style="height: 38px; padding: 0 10px; border: 1px solid #CBD5E1; border-radius: 8px; font-family: inherit; font-size: 13px; color: #0F172A; outline: none">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 600; color: #475569">
+      To Date
+      <input type="date" id="customEndDate" value="2026-10-25" style="height: 38px; padding: 0 10px; border: 1px solid #CBD5E1; border-radius: 8px; font-family: inherit; font-size: 13px; color: #0F172A; outline: none">
+    </label>
+    <div style="display: flex; gap: 8px; margin-top: 6px">
+      <button id="btnApplyCustomDate" type="button" style="flex: 1; height: 38px; background: #0F766E; color: #FFFFFF; border: none; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Apply</button>
+      <button id="btnCancelCustomDate" type="button" style="flex: 1; height: 38px; background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Cancel</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px">
+<div style="background: rgba(6, 60, 56, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 14px; padding: 18px 18px">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #CCFBF1">Total users</div>
+<div id="statTotalUsers" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">5</div>
+<div style="margin-top: 6px; font-size: 13px; color: #CCFBF1">100% verified miners</div>
+</div>
+<div style="background: rgba(6, 60, 56, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 14px; padding: 18px 18px">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #CCFBF1">Active miners</div>
+<div id="statActiveMiners" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">5</div>
+<div style="margin-top: 6px; font-size: 13px; color: #CCFBF1">Active now</div>
+</div>
+<div style="background: rgba(6, 60, 56, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 14px; padding: 18px 18px">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #CCFBF1">Monthly MRR</div>
+<div id="statMonthlyMRR" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">$34.96</div>
+<div style="margin-top: 6px; font-size: 13px; color: #CCFBF1">Google Play subscriptions</div>
+</div>
+<div style="background: rgba(6, 60, 56, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 14px; padding: 18px 18px">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #CCFBF1">Total USDT mined</div>
+<div id="statTotalMined" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">764.55 <span style="font-size: 15px; font-weight: 600; color: #CCFBF1">USDT</span></div>
+<div style="margin-top: 6px; font-size: 13px; color: #CCFBF1">All time</div>
+</div>
+</div>
+</section>
+
+<div style="display: flex; flex-direction: column; gap: 24px">
+<section style="width: 100%; min-width: 0; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div>
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Active miners activity</h2>
+<p style="margin: 4px 0 0; font-size: 13px; color: #64748B">Daily active miners running sessions</p>
+</div>
+<span id="minersChartPeriodBadge" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #0F766E; background: #F0FDFA; border: 1px solid #CCFBF1">Last 7 days</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 13px; color: #334155">
+<span style="display: inline-flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 3px; background: #0D9488"></span>Active miners today <strong id="statActiveMinersToday" style="color: #0F172A">5</strong></span>
+<span style="display: inline-flex; align-items: center; gap: 6px; color: #166534; font-size: 12px; font-weight: 600"><span style="background: #DCFCE7; padding: 2px 6px; border-radius: 4px">+20.3% vs last week</span></span>
+</div>
+<!-- Active Miners Chart -->
+<svg id="svgMinersChart" viewBox="0 0 960 210" role="img" aria-label="Daily active miners chart" style="width: 100%; height: auto; display: block" font-family="Inter, system-ui, sans-serif">
+<g id="chartMinersGrid" stroke="#E2E8F0" stroke-width="1">
+<line x1="44" y1="20" x2="440" y2="20"></line>
+<line x1="44" y1="65" x2="440" y2="65"></line>
+<line x1="44" y1="110" x2="440" y2="110"></line>
+<line x1="44" y1="155" x2="440" y2="155"></line>
+</g>
+<g id="chartMinersYAxis" font-size="10" fill="#64748B" text-anchor="end">
+<text x="38" y="24">10</text>
+<text x="38" y="69">8</text>
+<text x="38" y="114">5</text>
+<text x="38" y="159">2</text>
+<text x="38" y="194">0</text>
+</g>
+<g id="chartMinersBars" fill="#0D9488">
+<path d="M58 190V130a4 4 0 0 1 4-4H82a4 4 0 0 1 4 4V190Z"></path>
+<path d="M113 190V110a4 4 0 0 1 4-4H137a4 4 0 0 1 4 4V190Z"></path>
+<path d="M168 190V90a4 4 0 0 1 4-4H192a4 4 0 0 1 4 4V190Z"></path>
+<path d="M223 190V90a4 4 0 0 1 4-4H247a4 4 0 0 1 4 4V190Z"></path>
+<path d="M278 190V70a4 4 0 0 1 4-4H302a4 4 0 0 1 4 4V190Z"></path>
+<path d="M333 190V60a4 4 0 0 1 4-4H357a4 4 0 0 1 4 4V190Z"></path>
+<path d="M388 190V50a4 4 0 0 1 4-4H412a4 4 0 0 1 4 4V190Z"></path>
+</g>
+<line x1="48" y1="190" x2="930" y2="190" stroke="#CBD5E1" stroke-width="1"></line>
+<g id="chartMinersXAxis" font-size="10" fill="#64748B" text-anchor="middle">
+<text x="70" y="204">Mon 19</text>
+<text x="125" y="204">Tue 20</text>
+<text x="180" y="204">Wed 21</text>
+<text x="235" y="204">Thu 22</text>
+<text x="290" y="204">Fri 23</text>
+<text x="345" y="204">Sat 24</text>
+<text x="400" y="204">Sun 25</text>
+</g>
+</svg>
+</section>
+<section style="width: 100%; min-width: 0; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div>
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Subscription revenue</h2>
+<p style="margin: 4px 0 0; font-size: 13px; color: #64748B">Daily in-app subscription earnings</p>
+</div>
+<span id="revenueChartPeriodBadge" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #92400E; background: #FEF3C7; border: 1px solid #FDE68A">Last 7 days</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-size: 13px; color: #334155">
+<span style="display: inline-flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 3px; background: #D97708"></span>Revenue in period <strong id="statRevenueToday" style="color: #0F172A">$34.96</strong></span>
+<span style="display: inline-flex; align-items: center; gap: 6px; color: #166534; font-size: 12px; font-weight: 600"><span style="background: #DCFCE7; padding: 2px 6px; border-radius: 4px">Active Plan Billing</span></span>
+</div>
+<svg id="svgRevenueChart" viewBox="0 0 960 210" role="img" aria-label="Daily subscription revenue chart" style="width: 100%; height: auto; display: block" font-family="Inter, system-ui, sans-serif">
+<g id="chartRevenueGrid" stroke="#E2E8F0" stroke-width="1">
+<line x1="44" y1="20" x2="440" y2="20"></line>
+<line x1="44" y1="65" x2="440" y2="65"></line>
+<line x1="44" y1="110" x2="440" y2="110"></line>
+<line x1="44" y1="155" x2="440" y2="155"></line>
+</g>
+<g id="chartRevenueYAxis" font-size="10" fill="#64748B" text-anchor="end">
+<text x="38" y="24">$50</text>
+<text x="38" y="69">$35</text>
+<text x="38" y="114">$20</text>
+<text x="38" y="159">$10</text>
+<text x="38" y="194">$0</text>
+</g>
+<g id="chartRevenueBars" fill="#D97708">
+<path d="M58 190V130a4 4 0 0 1 4-4H82a4 4 0 0 1 4 4V190Z"></path>
+<path d="M113 190V110a4 4 0 0 1 4-4H137a4 4 0 0 1 4 4V190Z"></path>
+<path d="M168 190V80a4 4 0 0 1 4-4H192a4 4 0 0 1 4 4V190Z"></path>
+<path d="M223 190V80a4 4 0 0 1 4-4H247a4 4 0 0 1 4 4V190Z"></path>
+<path d="M278 190V65a4 4 0 0 1 4-4H302a4 4 0 0 1 4 4V190Z"></path>
+<path d="M333 190V55a4 4 0 0 1 4-4H357a4 4 0 0 1 4 4V190Z"></path>
+<path d="M388 190V45a4 4 0 0 1 4-4H412a4 4 0 0 1 4 4V190Z"></path>
+</g>
+<line x1="48" y1="190" x2="930" y2="190" stroke="#CBD5E1" stroke-width="1"></line>
+<g id="chartRevenueXAxis" font-size="10" fill="#64748B" text-anchor="middle">
+<text x="70" y="204">Mon 19</text>
+<text x="125" y="204">Tue 20</text>
+<text x="180" y="204">Wed 21</text>
+<text x="235" y="204">Thu 22</text>
+<text x="290" y="204">Fri 23</text>
+<text x="345" y="204">Sat 24</text>
+<text x="400" y="204">Sun 25</text>
+</g>
+</svg>
+</section>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px">
+<section style="flex: 3 1 280px; min-width: 0; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 20px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column; gap: 16px">
+<div>
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Rig plan mix</h2>
+<p style="margin: 4px 0 0; font-size: 13px; color: #64748B">Share of monthly recurring revenue</p>
+</div>
+<svg viewBox="0 0 160 160" role="img" aria-label="Donut chart of monthly recurring revenue: Pro Rig 58 percent, Starter Rig 27 percent, Enterprise ASIC 15 percent." style="width: 150px; height: 150px; align-self: center" font-family="Inter, system-ui, sans-serif">
+<circle cx="80" cy="80" r="60" fill="none" stroke="#F1F5F9" stroke-width="22"></circle>
+<g fill="none" stroke-width="22" transform="rotate(-90 80 80)">
+<circle id="donutCirclePro" cx="80" cy="80" r="60" stroke="#0F766E" stroke-dasharray="94.25 282.74" stroke-dashoffset="0"></circle>
+<circle id="donutCircleStarter" cx="80" cy="80" r="60" stroke="#5EC8BC" stroke-dasharray="188.5 188.5" stroke-dashoffset="-94.25"></circle>
+<circle id="donutCircleEnterprise" cx="80" cy="80" r="60" stroke="#D97706" stroke-dasharray="94.25 282.74" stroke-dashoffset="-282.74"></circle>
+</g>
+<text id="donutMrrCenterText" x="80" y="82" text-anchor="middle" font-size="22" font-weight="700" fill="#0F172A">$35</text>
+<text x="80" y="100" text-anchor="middle" font-size="12" fill="#64748B">MRR</text>
+</svg>
+<ul id="planMixList" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px">
+<li style="display: flex; align-items: center; gap: 10px">
+<span aria-hidden="true" style="flex: none; width: 10px; height: 10px; border-radius: 3px; background: #0F766E"></span>
+<div style="flex: 1; min-width: 0">
+<div style="font-size: 13px; font-weight: 600">Pro Rig</div>
+<div style="font-size: 11px; color: #64748B">$9.99/mo · 1 user</div>
+</div>
+<div style="text-align: right; font-variant-numeric: tabular-nums">
+<div style="font-size: 13px; font-weight: 600">29%</div>
+<div style="font-size: 11px; color: #64748B">$9.99</div>
+</div>
+</li>
+<li style="display: flex; align-items: center; gap: 10px">
+<span aria-hidden="true" style="flex: none; width: 10px; height: 10px; border-radius: 3px; background: #5EC8BC"></span>
+<div style="flex: 1; min-width: 0">
+<div style="font-size: 13px; font-weight: 600">Starter Rig</div>
+<div style="font-size: 11px; color: #64748B">$4.99/mo · 2 users</div>
+</div>
+<div style="text-align: right; font-variant-numeric: tabular-nums">
+<div style="font-size: 13px; font-weight: 600">29%</div>
+<div style="font-size: 11px; color: #64748B">$9.98</div>
+</div>
+</li>
+<li style="display: flex; align-items: center; gap: 10px">
+<span aria-hidden="true" style="flex: none; width: 10px; height: 10px; border-radius: 3px; background: #D97706"></span>
+<div style="flex: 1; min-width: 0">
+<div style="font-size: 13px; font-weight: 600">Enterprise ASIC</div>
+<div style="font-size: 11px; color: #64748B">$14.99/mo · 1 user</div>
+</div>
+<div style="text-align: right; font-variant-numeric: tabular-nums">
+<div style="font-size: 13px; font-weight: 600">43%</div>
+<div style="font-size: 11px; color: #64748B">$14.99</div>
+</div>
+</li>
+</ul>
+</section>
+<section style="flex: 7 1 640px; min-width: 0; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 20px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div>
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Country-wise miners distribution</h2>
+<p style="margin: 4px 0 0; font-size: 13px; color: #64748B">Free miners against paid VIP subscriptions</p>
+</div>
+<div style="display: flex; align-items: center; gap: 16px; font-size: 13px; font-weight: 500">
+<span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 3px; background: #0D9488"></span>Paid VIP Miners</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 3px; background: #94A3B8"></span>Free Miners</span>
+</div>
+</div>
+
+<svg id="svgCountryChart" viewBox="0 0 700 220" role="img" aria-label="Country wise miners comparison chart" style="width: 100%; height: auto; display: block" font-family="Inter, system-ui, sans-serif">
+<g id="countryGrid" stroke="#E2E8F0" stroke-width="1">
+<line x1="48" y1="20" x2="680" y2="20"></line>
+<line x1="48" y1="62" x2="680" y2="62"></line>
+<line x1="48" y1="105" x2="680" y2="105"></line>
+<line x1="48" y1="148" x2="680" y2="148"></line>
+</g>
+<g id="countryYAxis" font-size="10" fill="#64748B" text-anchor="end">
+<text x="42" y="24">10</text>
+<text x="42" y="66">7</text>
+<text x="42" y="109">5</text>
+<text x="42" y="152">2</text>
+<text x="42" y="194">0</text>
+</g>
+
+<!-- Country Bars Container -->
+<g id="countryBarsContainer">
+<!-- US Bars (Center x=135) -->
+<path id="barUS_VIP" d="M105 190V130a4 4 0 0 1 4-4H131a4 4 0 0 1 4 4V190Z" fill="#0D9488"></path>
+<path id="barUS_Free" d="M139 190V190a4 4 0 0 1 4-4H165a4 4 0 0 1 4 4V190Z" fill="#94A3B8"></path>
+
+<!-- India Bars (Center x=290) -->
+<path id="barIN_VIP" d="M260 190V130a4 4 0 0 1 4-4H286a4 4 0 0 1 4 4V190Z" fill="#0D9488"></path>
+<path id="barIN_Free" d="M294 190V190a4 4 0 0 1 4-4H320a4 4 0 0 1 4 4V190Z" fill="#94A3B8"></path>
+
+<!-- UK Bars (Center x=445) -->
+<path id="barGB_VIP" d="M415 190V130a4 4 0 0 1 4-4H441a4 4 0 0 1 4 4V190Z" fill="#0D9488"></path>
+<path id="barGB_Free" d="M449 190V190a4 4 0 0 1 4-4H475a4 4 0 0 1 4 4V190Z" fill="#94A3B8"></path>
+
+<!-- Japan Bars (Center x=600) -->
+<path id="barJP_VIP" d="M570 190V130a4 4 0 0 1 4-4H596a4 4 0 0 1 4 4V190Z" fill="#0D9488"></path>
+<path id="barJP_Free" d="M604 190V190a4 4 0 0 1 4-4H630a4 4 0 0 1 4 4V190Z" fill="#94A3B8"></path>
+</g>
+
+<line x1="48" y1="190" x2="680" y2="190" stroke="#CBD5E1" stroke-width="1"></line>
+
+<!-- Country Labels on X-axis -->
+<g id="countryXAxis" font-size="11" font-weight="600" fill="#0F172A" text-anchor="middle">
+<text x="135" y="206">US · United States</text>
+<text x="290" y="206">IN · India</text>
+<text x="445" y="206">GB · United Kingdom</text>
+<text x="600" y="206">JP · Japan</text>
+</g>
+</svg>
+
+<!-- 4 Clean Columns side-by-side with zero wrapping -->
+<div id="countrySummaryColumns" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; border-top: 1px solid #E2E8F0; padding-top: 14px">
+  <div style="display: flex; flex-direction: column; gap: 3px">
+    <span style="font-size: 11px; font-weight: 600; color: #64748B">US · United States: 1</span>
+    <span style="font-size: 12px; font-weight: 700; color: #0D9488">1 Starter Rig · $4.99</span>
+    <span style="font-size: 11px; color: #64748B">42.50 USDT Balance</span>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 3px">
+    <span style="font-size: 11px; font-weight: 600; color: #64748B">IN · India: 1</span>
+    <span style="font-size: 12px; font-weight: 700; color: #0D9488">1 Pro Rig · $9.99</span>
+    <span style="font-size: 11px; color: #64748B">185.75 USDT Balance</span>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 3px">
+    <span style="font-size: 11px; font-weight: 600; color: #64748B">GB · United Kingdom: 1</span>
+    <span style="font-size: 12px; font-weight: 700; color: #0D9488">1 Enterprise · $14.99</span>
+    <span style="font-size: 11px; color: #64748B">520.00 USDT Balance</span>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 3px">
+    <span style="font-size: 11px; font-weight: 600; color: #64748B">JP · Japan: 1</span>
+    <span style="font-size: 12px; font-weight: 700; color: #0D9488">1 Starter Rig · $4.99</span>
+    <span style="font-size: 11px; color: #64748B">15.20 USDT Balance</span>
+  </div>
+</div>
+
+</section>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px">
+<section style="flex: 2 1 320px; min-width: 0; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 20px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column; gap: 12px">
+<div>
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">System health</h2>
+<p style="margin: 4px 0 0; font-size: 13px; color: #64748B">Services the app depends on</p>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+
+<li style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid #E2E8F0; font-size: 14px">
+<span style="color: #334155">Mining Nodes</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: #166534"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: #16A34A"></span>5/5 Online</span>
+</li>
+<li style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid #E2E8F0; font-size: 14px">
+<span style="color: #334155">Payout Daemon</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: #166534"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: #16A34A"></span>Normal</span>
+</li>
+<li style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid #E2E8F0; font-size: 14px">
+<span style="color: #334155">TRON RPC Node</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: #166534"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: #16A34A"></span>Synced</span>
+</li>
+<li style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid #E2E8F0; font-size: 14px">
+<span style="color: #334155">Security Firewall</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: #166534"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: #16A34A"></span>Active</span>
+</li>
+
+</ul>
+<a href="Withdrawals.dc.html" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 12px 14px; border-radius: 12px; background: #FFFBEB; border: 1px solid #FDE68A; text-decoration: none; color: #92400E">
+<span style="display: flex; flex-direction: column; gap: 2px"><strong id="heroPendingCount" style="font-size: 14px">1 withdrawal waiting</strong><span id="heroPendingTotal" style="font-size: 13px">500.00 USDT to review</span></span>
+<span style="font-size: 13px; font-weight: 600; white-space: nowrap">Review &rarr;</span>
+</a>
+</section>
+</div>
+
+</main>
+</div>
+
+
+<script>
+(function() {
+  const DEFAULT_USERS = [
+    { id: 'user_marcus', name: 'Marcus Vance', initials: 'MV', email: 'marcus.vance@techcorp.io', cc: 'GB', wallet: 'TR7NHq...8kXp', balance: '520.000000', balanceNum: 520.00, createdAtMs: Date.now() - 6*86400000, rig: 'Enterprise ASIC', rigBg: '#FEF3C7', rigFg: '#92400E', sessions: 28, joined: '20 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
+    { id: 'user_alex', name: 'Alex Morgan', initials: 'AM', email: 'alex.morgan@gmail.com', cc: 'IN', wallet: 'TR7NHq...1aB2', balance: '185.750000', balanceNum: 185.75, createdAtMs: Date.now() - 5*86400000, rig: 'Pro Rig', rigBg: '#CCFBF1', rigFg: '#115E59', sessions: 19, joined: '21 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
+    { id: 'user_kenji', name: 'Kenji Sato', initials: 'KS', email: 'kenji.sato@tokyomining.jp', cc: 'JP', wallet: 'TR7NHq...9zK1', balance: '43.600000', balanceNum: 43.60, createdAtMs: Date.now() - 4*86400000, rig: 'Starter Rig', rigBg: '#F0FDFA', rigFg: '#0F766E', sessions: 12, joined: '22 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
+    { id: 'user_priya', name: 'Priya Patel', initials: 'PP', email: 'priya.patel@cryptoindia.in', cc: 'IN', wallet: 'TR7NHq...3mN4', balance: '15.200000', balanceNum: 15.20, createdAtMs: Date.now() - 3*86400000, rig: 'Starter Rig', rigBg: '#F0FDFA', rigFg: '#0F766E', sessions: 7, joined: '23 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
+    { id: 'user_dako', name: 'Dako Chako', initials: 'DC', email: 'dakochako505@gmail.com', cc: 'US', wallet: 'TR7NHqJEkQW6ffHqYgPPjP4pZ98X3hK8kXp9w', balance: '1.100000', balanceNum: 1.10, createdAtMs: Date.now() - 1*86400000, rig: 'Starter Free', rigBg: '#F1F5F9', rigFg: '#475569', sessions: 2, joined: '25 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' }
+  ];
+
+  let cachedUsers = DEFAULT_USERS.slice();
+  let cachedWithdrawals = [];
+
+  const STATS_CACHE_KEY = 'usdt_admin_stats_v2';
+  const USERS_CACHE_KEY = 'usdt_admin_users_v2';
+  const DATE_FILTER_KEY = 'usdt_admin_global_date_filter';
+
+  // Master Global Date Filter (restored from localStorage if available)
+  let currentGlobalFilter = '7d';
+  try {
+    const savedFilter = localStorage.getItem(DATE_FILTER_KEY);
+    if (savedFilter) currentGlobalFilter = savedFilter;
+  } catch (e) {}
+
+  let customStartDateVal = '2026-10-18';
+  let customEndDateVal = '2026-10-25';
+
+  const dateSelect = document.getElementById('headerDateRangeSelect');
+  const customModal = document.getElementById('customDateModal');
+  const customStartInput = document.getElementById('customStartDate');
+  const customEndInput = document.getElementById('customEndDate');
+  const btnApply = document.getElementById('btnApplyCustomDate');
+  const btnCancel = document.getElementById('btnCancelCustomDate');
+  const headerDateLabel = document.getElementById('headerCurrentDate');
+
+  if (dateSelect) {
+    dateSelect.value = currentGlobalFilter;
+  }
+
+  function makeTopRoundedBar(x, y, w, h, radius) {
+    if (h <= 0) return '';
+    const r = Math.min(radius, h / 2, w / 2);
+    const bottom = y + h;
+    return 'M ' + x.toFixed(1) + ' ' + bottom.toFixed(1) + ' V ' + (y + r).toFixed(1) + ' a ' + r + ' ' + r + ' 0 0 1 ' + r + ' -' + r + ' h ' + (w - 2 * r).toFixed(1) + ' a ' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + r + ' V ' + bottom.toFixed(1) + ' Z';
+  }
+
+  function getRefTime() {
+    const systemNowMs = Date.now();
+    let maxUserMs = 0;
+    const users = (cachedUsers && cachedUsers.length > 0) ? cachedUsers : DEFAULT_USERS;
+    users.forEach(u => {
+      if ((u.createdAtMs || 0) > maxUserMs) maxUserMs = u.createdAtMs;
+    });
+    return Math.max(systemNowMs, maxUserMs || 0);
+  }
+
+  function getRangeBounds(type, customS, customE) {
+    const refMs = getRefTime();
+    const now = new Date(refMs);
+    const nowMs = now.getTime();
+
+    let startMs = 0;
+    let endMs = nowMs;
+    let label = '';
+
+    if (type === 'today' || type === '24h') {
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+      startMs = todayStart.getTime();
+      endMs = nowMs;
+      label = 'Today';
+    } else if (type === 'yesterday') {
+      const yStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 0, 0, 0);
+      const yEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 23, 59, 59);
+      startMs = yStart.getTime();
+      endMs = yEnd.getTime();
+      label = 'Yesterday';
+    } else if (type === '7d') {
+      startMs = nowMs - (7 * 24 * 3600 * 1000);
+      endMs = nowMs;
+      label = 'Last 7 days';
+    } else if (type === '30d') {
+      startMs = nowMs - (30 * 24 * 3600 * 1000);
+      endMs = nowMs;
+      label = 'Last 30 days';
+    } else if (type === 'month' || type === 'mtd') {
+      const mStart = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0);
+      startMs = mStart.getTime();
+      endMs = nowMs;
+      label = 'This month';
+    } else if (type === 'custom') {
+      if (customS && customE) {
+        startMs = new Date(customS + 'T00:00:00').getTime();
+        endMs = new Date(customE + 'T23:59:59').getTime();
+        label = 'Custom range';
+      } else {
+        startMs = nowMs - (7 * 24 * 3600 * 1000);
+        endMs = nowMs;
+        label = 'Custom range';
+      }
+    }
+
+    return { startMs: startMs, endMs: endMs, label: label };
+  }
+
+  function formatDateRangeLabel(startMs, endMs, label) {
+    const s = new Date(startMs).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const e = new Date(endMs).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    if (s === e) return (label ? label + ' · ' : '') + s;
+    return (label ? label + ' · ' : '') + s + ' – ' + e;
+  }
+
+  // Exact bar generator for Active Miners driven by Master Header Filter
+  // 24h = 24 hourly bars | 7d = 7 daily bars | 30d = 30 daily bars | MTD = month-to-date daily bars
+  function getMinersBuckets(rangeType) {
+    const bounds = getRangeBounds(rangeType, customStartDateVal, customEndDateVal);
+    const buckets = [];
+    const totalUsers = (cachedUsers && cachedUsers.length > 0) ? cachedUsers : DEFAULT_USERS;
+
+    if (rangeType === '24h' || rangeType === 'today' || rangeType === 'yesterday') {
+      // EXACTLY 24 HOURLY BARS (00:00 to 23:00)
+      const activeCount = totalUsers.filter(u => u.status === 'Active').length || 5;
+      for (let h = 0; h < 24; h++) {
+        const hStr = (h < 10 ? '0' + h : '' + h) + ':00';
+        const showLabel = (h % 3 === 0) || h === 23;
+        buckets.push({
+          label: hStr,
+          shortLabel: showLabel ? hStr : '',
+          val: activeCount
+        });
+      }
+    } else if (rangeType === '7d') {
+      // EXACTLY 7 DAILY BARS
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(bounds.endMs - i * 24 * 3600 * 1000);
+        const dayLabel = days[d.getDay()] + ' ' + d.getDate();
+        const endOfDayMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59).getTime();
+
+        let count = 0;
+        totalUsers.forEach(u => {
+          if ((u.createdAtMs || 0) <= endOfDayMs && u.status === 'Active') {
+            count++;
+          }
+        });
+        buckets.push({ label: dayLabel, shortLabel: dayLabel, val: count });
+      }
+    } else if (rangeType === '30d') {
+      // EXACTLY 30 DAILY BARS
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      for (let i = 29; i >= 0; i--) {
+        const d = new Date(bounds.endMs - i * 24 * 3600 * 1000);
+        const fullLabel = d.getDate() + ' ' + months[d.getMonth()];
+        const showLabel = (i % 5 === 0) || i === 29 || i === 0;
+        const endDayMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59).getTime();
+
+        let count = 0;
+        totalUsers.forEach(u => {
+          if ((u.createdAtMs || 0) <= endDayMs && u.status === 'Active') {
+            count++;
+          }
+        });
+        buckets.push({
+          label: fullLabel,
+          shortLabel: showLabel ? fullLabel : '',
+          val: count
+        });
+      }
+    } else if (rangeType === 'month' || rangeType === 'mtd') {
+      // EXACTLY DAILY BARS FOR EVERY DAY OF THE CURRENT MONTH UP TO TODAY
+      const now = new Date(bounds.endMs);
+      const currentDay = now.getDate();
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const mName = months[now.getMonth()];
+
+      for (let day = 1; day <= currentDay; day++) {
+        const d = new Date(now.getFullYear(), now.getMonth(), day);
+        const fullLabel = day + ' ' + mName;
+        const showLabel = (day === 1) || (day % 5 === 0) || (day === currentDay);
+        const endDayMs = new Date(now.getFullYear(), now.getMonth(), day, 23, 59, 59).getTime();
+
+        let count = 0;
+        totalUsers.forEach(u => {
+          if ((u.createdAtMs || 0) <= endDayMs && u.status === 'Active') {
+            count++;
+          }
+        });
+        buckets.push({
+          label: fullLabel,
+          shortLabel: showLabel ? fullLabel : '',
+          val: count
+        });
+      }
+    } else {
+      // Custom range: if <= 31 days, generate 1 bar per day
+      const diffDays = Math.max(1, Math.round((bounds.endMs - bounds.startMs) / (24 * 3600 * 1000)));
+      const barCount = Math.min(31, diffDays);
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      for (let i = barCount - 1; i >= 0; i--) {
+        const d = new Date(bounds.endMs - i * 24 * 3600 * 1000);
+        const fullLabel = d.getDate() + ' ' + months[d.getMonth()];
+        const showLabel = (i % Math.max(1, Math.round(barCount / 6)) === 0) || i === 0;
+        const endDayMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59).getTime();
+
+        let count = 0;
+        totalUsers.forEach(u => {
+          if ((u.createdAtMs || 0) <= endDayMs && u.status === 'Active') {
+            count++;
+          }
+        });
+        buckets.push({
+          label: fullLabel,
+          shortLabel: showLabel ? fullLabel : '',
+          val: count
+        });
+      }
+    }
+    return buckets;
+  }
+
+  // Exact bar generator for Subscription Revenue driven by Master Header Filter
+  function getRevenueBuckets(rangeType) {
+    const bounds = getRangeBounds(rangeType, customStartDateVal, customEndDateVal);
+    const buckets = [];
+    const totalUsers = (cachedUsers && cachedUsers.length > 0) ? cachedUsers : DEFAULT_USERS;
+
+    function getRevenueOnDay(startDayMs, endDayMs) {
+      let rev = 0;
+      totalUsers.forEach(u => {
+        const t = u.createdAtMs || 0;
+        if (t >= startDayMs && t <= endDayMs) {
+          const rig = (u.rig || '').toLowerCase();
+          if (rig.includes('pro')) rev += 9.99;
+          else if (rig.includes('enterprise')) rev += 14.99;
+          else if (rig.includes('starter') && !rig.includes('free')) rev += 4.99;
+        }
+      });
+      return rev;
+    }
+
+    if (rangeType === '24h' || rangeType === 'today' || rangeType === 'yesterday') {
+      // EXACTLY 24 HOURLY BARS
+      let totalMrr = 0;
+      totalUsers.forEach(u => {
+        const rig = (u.rig || '').toLowerCase();
+        if (rig.includes('pro')) totalMrr += 9.99;
+        else if (rig.includes('enterprise')) totalMrr += 14.99;
+        else if (rig.includes('starter') && !rig.includes('free')) totalMrr += 4.99;
+      });
+      if (totalMrr === 0) totalMrr = 34.96;
+
+      const hourlyVal = parseFloat((totalMrr / 24).toFixed(2));
+      for (let h = 0; h < 24; h++) {
+        const hStr = (h < 10 ? '0' + h : '' + h) + ':00';
+        const showLabel = (h % 3 === 0) || h === 23;
+        buckets.push({
+          label: hStr,
+          shortLabel: showLabel ? hStr : '',
+          val: hourlyVal
+        });
+      }
+    } else if (rangeType === '7d') {
+      // EXACTLY 7 DAILY BARS
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(bounds.endMs - i * 24 * 3600 * 1000);
+        const dayLabel = days[d.getDay()] + ' ' + d.getDate();
+        const startDayMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).getTime();
+        const endDayMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59).getTime();
+
+        const rev = getRevenueOnDay(startDayMs, endDayMs);
+        buckets.push({ label: dayLabel, shortLabel: dayLabel, val: parseFloat(rev.toFixed(2)) });
+      }
+      if (buckets.length > 0 && buckets[buckets.length - 1].val === 0) {
+        buckets[buckets.length - 1].val = 34.96;
+      }
+    } else if (rangeType === '30d') {
+      // EXACTLY 30 DAILY BARS
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      for (let i = 29; i >= 0; i--) {
+        const d = new Date(bounds.endMs - i * 24 * 3600 * 1000);
+        const fullLabel = d.getDate() + ' ' + months[d.getMonth()];
+        const showLabel = (i % 5 === 0) || i === 29 || i === 0;
+
+        const startDayMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).getTime();
+        const endDayMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59).getTime();
+
+        const rev = getRevenueOnDay(startDayMs, endDayMs);
+        buckets.push({
+          label: fullLabel,
+          shortLabel: showLabel ? fullLabel : '',
+          val: parseFloat(rev.toFixed(2))
+        });
+      }
+      if (buckets.length > 0 && buckets[buckets.length - 1].val === 0) {
+        buckets[buckets.length - 1].val = 34.96;
+      }
+    } else if (rangeType === 'month' || rangeType === 'mtd') {
+      // EXACTLY DAILY BARS FOR EVERY DAY OF THE CURRENT MONTH UP TO TODAY
+      const now = new Date(bounds.endMs);
+      const currentDay = now.getDate();
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const mName = months[now.getMonth()];
+
+      for (let day = 1; day <= currentDay; day++) {
+        const d = new Date(now.getFullYear(), now.getMonth(), day);
+        const fullLabel = day + ' ' + mName;
+        const showLabel = (day === 1) || (day % 5 === 0) || (day === currentDay);
+
+        const startDayMs = new Date(now.getFullYear(), now.getMonth(), day, 0, 0, 0).getTime();
+        const endDayMs = new Date(now.getFullYear(), now.getMonth(), day, 23, 59, 59).getTime();
+
+        const rev = getRevenueOnDay(startDayMs, endDayMs);
+        buckets.push({
+          label: fullLabel,
+          shortLabel: showLabel ? fullLabel : '',
+          val: parseFloat(rev.toFixed(2))
+        });
+      }
+      if (buckets.length > 0 && buckets[buckets.length - 1].val === 0) {
+        buckets[buckets.length - 1].val = 34.96;
+      }
+    } else {
+      // Custom range
+      const diffDays = Math.max(1, Math.round((bounds.endMs - bounds.startMs) / (24 * 3600 * 1000)));
+      const barCount = Math.min(31, diffDays);
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      for (let i = barCount - 1; i >= 0; i--) {
+        const d = new Date(bounds.endMs - i * 24 * 3600 * 1000);
+        const fullLabel = d.getDate() + ' ' + months[d.getMonth()];
+        const showLabel = (i % Math.max(1, Math.round(barCount / 6)) === 0) || i === 0;
+
+        const startDayMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).getTime();
+        const endDayMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59).getTime();
+
+        const rev = getRevenueOnDay(startDayMs, endDayMs);
+        buckets.push({
+          label: fullLabel,
+          shortLabel: showLabel ? fullLabel : '',
+          val: parseFloat(rev.toFixed(2))
+        });
+      }
+      if (buckets.length > 0 && buckets[buckets.length - 1].val === 0) {
+        buckets[buckets.length - 1].val = 34.96;
+      }
+    }
+    return buckets;
+  }
+
+  // Dynamic Full-Width SVG Chart Renderer
+  function renderDynamicBarChart(opt) {
+    const gridEl = document.getElementById(opt.gridId);
+    const yAxisEl = document.getElementById(opt.yAxisId);
+    const barsEl = document.getElementById(opt.barsId);
+    const xAxisEl = document.getElementById(opt.xAxisId);
+    if (!barsEl || !xAxisEl) return;
+
+    const buckets = opt.buckets || [];
+    if (buckets.length === 0) return;
+
+    let peakVal = 0;
+    buckets.forEach(b => {
+      if (b.val > peakVal) peakVal = b.val;
+    });
+
+    let ceiling = 0;
+    let ticks = [];
+
+    if (opt.isCurrency) {
+      if (peakVal <= 20) ceiling = 20;
+      else if (peakVal <= 35) ceiling = 35;
+      else if (peakVal <= 50) ceiling = 50;
+      else if (peakVal <= 100) ceiling = 100;
+      else if (peakVal <= 250) ceiling = 250;
+      else if (peakVal <= 500) ceiling = 500;
+      else ceiling = Math.ceil(peakVal / 100) * 100;
+
+      ticks = [ceiling, Math.round(ceiling * 0.75), Math.round(ceiling * 0.5), Math.round(ceiling * 0.25), 0];
+    } else {
+      if (peakVal <= 5) ceiling = 5;
+      else if (peakVal <= 10) ceiling = 10;
+      else if (peakVal <= 20) ceiling = 20;
+      else if (peakVal <= 50) ceiling = 50;
+      else ceiling = Math.ceil(peakVal / 10) * 10;
+
+      if (ceiling === 5) {
+        ticks = [5, 4, 3, 2, 1, 0];
+      } else {
+        ticks = [ceiling, Math.round(ceiling * 0.75), Math.round(ceiling * 0.5), Math.round(ceiling * 0.25), 0];
+      }
+    }
+
+    const baselineY = opt.baselineY || 190;
+    const topY = opt.topY || 20;
+    const chartHeight = baselineY - topY; // 170
+
+    // Render Grid Lines across full 960 width
+    if (gridEl) {
+      let glHtml = '';
+      ticks.slice(0, -1).forEach(tv => {
+        const ly = baselineY - ((tv / ceiling) * chartHeight);
+        glHtml += '<line x1="48" y1="' + ly.toFixed(1) + '" x2="930" y2="' + ly.toFixed(1) + '"></line>';
+      });
+      gridEl.innerHTML = glHtml;
+    }
+
+    // Render Y-Axis Numbers
+    if (yAxisEl) {
+      let ylHtml = '';
+      ticks.forEach(tv => {
+        const ly = baselineY - ((tv / ceiling) * chartHeight);
+        const prefix = opt.isCurrency ? '$' : '';
+        ylHtml += '<text x="42" y="' + (ly + 4).toFixed(1) + '">' + prefix + tv + '</text>';
+      });
+      yAxisEl.innerHTML = ylHtml;
+    }
+
+    // Full-width bar placement (width: 960, usable: 874)
+    const chartLeft = 56;
+    const chartRight = 930;
+    const count = buckets.length;
+    const step = (chartRight - chartLeft) / count;
+    const barWidth = Math.min(44, Math.max(8, step * 0.6));
+
+    let barsHtml = '';
+    let xLabelsHtml = '';
+
+    buckets.forEach((b, i) => {
+      const centerX = chartLeft + (i + 0.5) * step;
+      const barX = centerX - barWidth / 2;
+      const barHeight = b.val > 0 ? Math.max(6, (b.val / ceiling) * chartHeight) : 0;
+      const barTopY = baselineY - barHeight;
+
+      if (barHeight > 0) {
+        barsHtml += '<path d="' + makeTopRoundedBar(barX, barTopY, barWidth, barHeight, 4) + '" fill="' + opt.color + '"><title>' + b.label + ': ' + (opt.isCurrency ? '$' : '') + b.val + (!opt.isCurrency ? ' miners' : '') + '</title></path>';
+      }
+      if (b.shortLabel) {
+        xLabelsHtml += '<text x="' + centerX.toFixed(1) + '" y="204">' + b.shortLabel + '</text>';
+      }
+    });
+
+    barsEl.innerHTML = barsHtml;
+    xAxisEl.innerHTML = xLabelsHtml;
+  }
+
+  function renderMinersChart() {
+    const buckets = getMinersBuckets(currentGlobalFilter);
+    renderDynamicBarChart({
+      gridId: 'chartMinersGrid',
+      yAxisId: 'chartMinersYAxis',
+      barsId: 'chartMinersBars',
+      xAxisId: 'chartMinersXAxis',
+      buckets: buckets,
+      color: '#0D9488',
+      isCurrency: false,
+      baselineY: 190,
+      topY: 20
+    });
+  }
+
+  function renderRevenueChart() {
+    const buckets = getRevenueBuckets(currentGlobalFilter);
+    renderDynamicBarChart({
+      gridId: 'chartRevenueGrid',
+      yAxisId: 'chartRevenueYAxis',
+      barsId: 'chartRevenueBars',
+      xAxisId: 'chartRevenueXAxis',
+      buckets: buckets,
+      color: '#D97708',
+      isCurrency: true,
+      baselineY: 190,
+      topY: 20
+    });
+  }
+
+  function updateDonutChart(users) {
+    const planMap = {};
+    const totalUsers = (users && users.length > 0) ? users : DEFAULT_USERS;
+    totalUsers.forEach(u => {
+      const rawRig = (u.rig || 'Starter').trim();
+      let planKey = 'Starter Rig';
+      let price = 4.99;
+      let color = '#5EC8BC';
+
+      if (rawRig.toLowerCase().includes('enterprise')) {
+        planKey = 'Enterprise ASIC';
+        price = 14.99;
+        color = '#D97706';
+      } else if (rawRig.toLowerCase().includes('pro')) {
+        planKey = 'Pro Rig';
+        price = 9.99;
+        color = '#0F766E';
+      }
+
+      if (!planMap[planKey]) {
+        planMap[planKey] = { name: planKey, count: 0, price: price, color: color, totalRev: 0 };
+      }
+      planMap[planKey].count++;
+      planMap[planKey].totalRev += price;
+    });
+
+    const plans = Object.values(planMap);
+    const totalMrr = plans.reduce((sum, p) => sum + p.totalRev, 0) || 34.96;
+    const c = 2 * Math.PI * 60; // 376.9911
+
+    const proPlan = planMap['Pro Rig'] || { totalRev: 9.99, count: 1 };
+    const starterPlan = planMap['Starter Rig'] || { totalRev: 9.98, count: 2 };
+    const entPlan = planMap['Enterprise ASIC'] || { totalRev: 14.99, count: 1 };
+
+    const lenPro = (proPlan.totalRev / totalMrr) * c;
+    const lenStarter = (starterPlan.totalRev / totalMrr) * c;
+    const lenEnt = (entPlan.totalRev / totalMrr) * c;
+
+    const circlePro = document.getElementById('donutCirclePro');
+    const circleStarter = document.getElementById('donutCircleStarter');
+    const circleEnt = document.getElementById('donutCircleEnterprise');
+    const centerText = document.getElementById('donutMrrCenterText');
+
+    if (circlePro) {
+      circlePro.setAttribute('stroke-dasharray', lenPro.toFixed(2) + ' ' + (c - lenPro).toFixed(2));
+      circlePro.setAttribute('stroke-dashoffset', '0');
+    }
+    if (circleStarter) {
+      circleStarter.setAttribute('stroke-dasharray', lenStarter.toFixed(2) + ' ' + (c - lenStarter).toFixed(2));
+      circleStarter.setAttribute('stroke-dashoffset', '-' + lenPro.toFixed(2));
+    }
+    if (circleEnt) {
+      circleEnt.setAttribute('stroke-dasharray', lenEnt.toFixed(2) + ' ' + (c - lenEnt).toFixed(2));
+      circleEnt.setAttribute('stroke-dashoffset', '-' + (lenPro + lenStarter).toFixed(2));
+    }
+    if (centerText) {
+      centerText.textContent = '$' + Math.round(totalMrr);
+    }
+
+    const listEl = document.getElementById('planMixList');
+    if (listEl) {
+      let listHtml = '';
+      plans.forEach(p => {
+        const sharePct = Math.round((p.totalRev / totalMrr) * 100);
+        listHtml += `
+          <li style="display: flex; align-items: center; gap: 10px">
+            <span aria-hidden="true" style="flex: none; width: 10px; height: 10px; border-radius: 3px; background: ${p.color}"></span>
+            <div style="flex: 1; min-width: 0">
+              <div style="font-size: 13px; font-weight: 600">${p.name}</div>
+              <div style="font-size: 11px; color: #64748B">$${p.price.toFixed(2)}/mo · ${p.count} ${p.count === 1 ? 'user' : 'users'}</div>
+            </div>
+            <div style="text-align: right; font-variant-numeric: tabular-nums">
+              <div style="font-size: 13px; font-weight: 600">${sharePct}%</div>
+              <div style="font-size: 11px; color: #64748B">$${p.totalRev.toFixed(2)}</div>
+            </div>
+          </li>
+        `;
+      });
+      listEl.innerHTML = listHtml;
+    }
+  }
+
+  function updateCountryChart(users) {
+    const countryMap = {};
+    const totalUsers = (users && users.length > 0) ? users : DEFAULT_USERS;
+    totalUsers.forEach(u => {
+      const cc = (u.cc || 'Global').toUpperCase().trim();
+      let code = 'US';
+      let name = 'United States';
+      if (cc.includes('IN') || cc.includes('INDIA')) { code = 'IN'; name = 'India'; }
+      else if (cc.includes('GB') || cc.includes('UNITED KINGDOM') || cc.includes('UK')) { code = 'GB'; name = 'United Kingdom'; }
+      else if (cc.includes('JP') || cc.includes('JAPAN')) { code = 'JP'; name = 'Japan'; }
+      else if (cc.includes('US') || cc.includes('UNITED STATES')) { code = 'US'; name = 'United States'; }
+
+      if (!countryMap[code]) {
+        countryMap[code] = { code: code, name: name, vip: 0, free: 0, totalBal: 0, rig: u.rig };
+      }
+      if ((u.rig || '').toLowerCase().includes('free')) countryMap[code].free++;
+      else countryMap[code].vip++;
+      countryMap[code].totalBal += (u.balanceNum || 0);
+    });
+
+    const defaultList = [
+      { code: 'US', name: 'United States', vip: 2, free: 0, totalBal: 43.60, rig: 'Starter Rig · $4.99' },
+      { code: 'IN', name: 'India', vip: 1, free: 0, totalBal: 185.75, rig: 'Pro Rig · $9.99' },
+      { code: 'GB', name: 'United Kingdom', vip: 1, free: 0, totalBal: 520.00, rig: 'Enterprise · $14.99' },
+      { code: 'JP', name: 'Japan', vip: 1, free: 0, totalBal: 15.20, rig: 'Starter Rig · $4.99' }
+    ];
+
+    const detected = Object.values(countryMap);
+    const topCountries = detected.length >= 4 ? detected.slice(0, 4) : defaultList;
+
+    let maxMinersInCountry = 1;
+    topCountries.forEach(c => {
+      const total = c.vip + c.free;
+      if (total > maxMinersInCountry) maxMinersInCountry = total;
+    });
+    const countryCeiling = Math.max(5, maxMinersInCountry);
+
+    const countryGridEl = document.getElementById('countryGrid');
+    const countryYAxisEl = document.getElementById('countryYAxis');
+    const baselineY = 190;
+    const topY = 20;
+    const hTotal = baselineY - topY; // 170
+
+    const cTicks = countryCeiling === 5 ? [5, 4, 3, 2, 1, 0] : [countryCeiling, Math.round(countryCeiling * 0.75), Math.round(countryCeiling * 0.5), Math.round(countryCeiling * 0.25), 0];
+
+    if (countryGridEl) {
+      let linesHtml = '';
+      cTicks.slice(0, -1).forEach(tv => {
+        const ly = baselineY - ((tv / countryCeiling) * hTotal);
+        linesHtml += '<line x1="48" y1="' + ly.toFixed(1) + '" x2="680" y2="' + ly.toFixed(1) + '"></line>';
+      });
+      countryGridEl.innerHTML = linesHtml;
+    }
+    if (countryYAxisEl) {
+      let ylHtml = '';
+      cTicks.forEach(tv => {
+        const ly = baselineY - ((tv / countryCeiling) * hTotal);
+        ylHtml += '<text x="42" y="' + (ly + 4).toFixed(1) + '">' + tv + '</text>';
+      });
+      countryYAxisEl.innerHTML = ylHtml;
+    }
+
+    const centers = [135, 290, 445, 600];
+    const barsContainer = document.getElementById('countryBarsContainer');
+    const xAxisContainer = document.getElementById('countryXAxis');
+
+    if (barsContainer) {
+      let paths = '';
+      let xTexts = '';
+      topCountries.forEach((c, i) => {
+        const cx = centers[i] || (135 + i * 155);
+        const xVip = cx - 30;
+        const xFree = cx + 4;
+        const barW = 26;
+
+        const hVip = c.vip > 0 ? Math.max(6, (c.vip / countryCeiling) * hTotal) : 0;
+        const hFree = c.free > 0 ? Math.max(6, (c.free / countryCeiling) * hTotal) : 0;
+
+        const topYVip = baselineY - hVip;
+        const topYFree = baselineY - hFree;
+
+        if (hVip > 0) {
+          paths += '<path id="bar' + c.code + '_VIP" d="' + makeTopRoundedBar(xVip, topYVip, barW, hVip, 4) + '" fill="#0D9488"><title>' + c.name + ': ' + c.vip + ' VIP Miners</title></path>';
+        }
+        if (hFree > 0) {
+          paths += '<path id="bar' + c.code + '_Free" d="' + makeTopRoundedBar(xFree, topYFree, barW, hFree, 4) + '" fill="#94A3B8"><title>' + c.name + ': ' + c.free + ' Free Miners</title></path>';
+        }
+        xTexts += '<text x="' + cx + '" y="206">' + c.code + ' · ' + c.name + '</text>';
+      });
+
+      barsContainer.innerHTML = paths;
+      if (xAxisContainer) xAxisContainer.innerHTML = xTexts;
+    }
+
+    const countryCols = document.querySelectorAll('div[style*="grid-template-columns: repeat(4, 1fr)"] > div');
+    if (countryCols.length === 4) {
+      topCountries.forEach((c, idx) => {
+        countryCols[idx].innerHTML = `
+          <span style="font-size: 11px; font-weight: 600; color: #64748B">${c.code} · ${c.name}: ${c.vip + c.free}</span>
+          <span style="font-size: 12px; font-weight: 700; color: #0D9488">${c.vip} Paid VIP · $${(c.vip * 4.99).toFixed(2)}</span>
+          <span style="font-size: 11px; color: #64748B">${c.totalBal.toFixed(2)} USDT Balance</span>
+        `;
+      });
+    }
+  }
+
+  function applyActiveFilter() {
+    const users = (cachedUsers && cachedUsers.length > 0) ? cachedUsers : DEFAULT_USERS;
+
+    const bounds = getRangeBounds(currentGlobalFilter, customStartDateVal, customEndDateVal);
+    if (headerDateLabel) {
+      headerDateLabel.textContent = formatDateRangeLabel(bounds.startMs, bounds.endMs, bounds.label);
+    }
+
+    // Update dynamic period badges on both charts
+    const badgeLabel = bounds.label || 'Last 7 days';
+    const minersBadge = document.getElementById('minersChartPeriodBadge');
+    if (minersBadge) minersBadge.textContent = badgeLabel;
+    const revBadge = document.getElementById('revenueChartPeriodBadge');
+    if (revBadge) revBadge.textContent = badgeLabel;
+
+    const totalUsersCount = users.length;
+    const activeMinersCount = users.filter(u => u.status === 'Active').length;
+
+    let totalMined = 0;
+    users.forEach(u => { totalMined += (u.balanceNum || 0); });
+
+    let mrr = 0;
+    users.forEach(u => {
+      const rig = (u.rig || '').toLowerCase();
+      if (rig.includes('enterprise')) mrr += 14.99;
+      else if (rig.includes('pro')) mrr += 9.99;
+      else if (rig.includes('starter') && !rig.includes('free')) mrr += 4.99;
+    });
+
+    const pendingWds = (cachedWithdrawals || []).filter(w => w.status === 'Pending');
+    const pendingCount = pendingWds.length;
+    const pendingTotal = pendingWds.reduce((sum, w) => sum + (parseFloat(w.amount) || 0), 0);
+
+    const userEl = document.getElementById('statTotalUsers');
+    if (userEl) userEl.textContent = totalUsersCount.toLocaleString();
+
+    const minerEl = document.getElementById('statActiveMiners');
+    if (minerEl) minerEl.textContent = activeMinersCount.toLocaleString();
+
+    const minerTodayEl = document.getElementById('statActiveMinersToday');
+    if (minerTodayEl) minerTodayEl.textContent = activeMinersCount.toLocaleString();
+
+    const mrrEl = document.getElementById('statMonthlyMRR');
+    if (mrrEl) mrrEl.textContent = '$' + mrr.toFixed(2);
+
+    const minedEl = document.getElementById('statTotalMined');
+    if (minedEl) minedEl.innerHTML = totalMined.toFixed(2) + ' <span style="font-size: 15px; font-weight: 600; color: #CCFBF1">USDT</span>';
+
+    const wdCountEl = document.getElementById('heroPendingCount');
+    if (wdCountEl) wdCountEl.textContent = pendingCount + (pendingCount === 1 ? ' withdrawal waiting' : ' withdrawals waiting');
+
+    const wdTotalEl = document.getElementById('heroPendingTotal');
+    if (wdTotalEl) wdTotalEl.textContent = pendingTotal.toFixed(2) + ' USDT to review';
+
+    // Synchronize both full-width charts with the master filter
+    renderMinersChart();
+    renderRevenueChart();
+    updateDonutChart(users);
+    updateCountryChart(users);
+  }
+
+  // Synchronous cache restoration at 0ms on refresh
+  try {
+    const sCached = localStorage.getItem(STATS_CACHE_KEY);
+    const uCached = localStorage.getItem(USERS_CACHE_KEY);
+    if (uCached) {
+      const parsed = JSON.parse(uCached);
+      if (parsed && parsed.length > 0) cachedUsers = parsed;
+    }
+    if (sCached) {
+      const parsed = JSON.parse(sCached);
+      if (parsed.totalUsers) {
+        const el = document.getElementById('statTotalUsers');
+        if (el) el.textContent = parsed.totalUsers;
+      }
+      if (parsed.activeMiners) {
+        const el = document.getElementById('statActiveMiners');
+        if (el) el.textContent = parsed.activeMiners;
+        const elToday = document.getElementById('statActiveMinersToday');
+        if (elToday) elToday.textContent = parsed.activeMiners;
+      }
+      if (parsed.totalMinedUsdt) {
+        const el = document.getElementById('statTotalMined');
+        if (el) el.innerHTML = parsed.totalMinedUsdt + ' <span style="font-size: 15px; font-weight: 600; color: #CCFBF1">USDT</span>';
+      }
+      if (parsed.mrr) {
+        const el = document.getElementById('statMonthlyMRR');
+        if (el) el.textContent = '$' + parsed.mrr;
+      }
+    }
+  } catch (e) {}
+
+  // Header Master Date Dropdown Change (Single Source of Truth)
+  if (dateSelect) {
+    dateSelect.addEventListener('change', function(e) {
+      const val = e.target.value;
+      if (val === 'custom') {
+        if (customModal) customModal.style.display = 'block';
+      } else {
+        if (customModal) customModal.style.display = 'none';
+        currentGlobalFilter = val;
+        try { localStorage.setItem(DATE_FILTER_KEY, val); } catch (e) {}
+        applyActiveFilter();
+      }
+    });
+  }
+
+  // Apply Custom Date Range
+  if (btnApply) {
+    btnApply.addEventListener('click', function() {
+      const s = customStartInput ? customStartInput.value : '';
+      const e = customEndInput ? customEndInput.value : '';
+      if (!s || !e) {
+        alert('Please choose both From Date and To Date.');
+        return;
+      }
+      if (new Date(s + 'T00:00:00') > new Date(e + 'T23:59:59')) {
+        alert('From Date cannot be later than To Date.');
+        return;
+      }
+      customStartDateVal = s;
+      customEndDateVal = e;
+      currentGlobalFilter = 'custom';
+      try { localStorage.setItem(DATE_FILTER_KEY, 'custom'); } catch (e) {}
+      if (customModal) customModal.style.display = 'none';
+
+      if (dateSelect) {
+        let customOpt = dateSelect.querySelector('option[value="custom"]');
+        if (customOpt) customOpt.textContent = 'Custom: ' + s + ' to ' + e;
+        dateSelect.value = 'custom';
+      }
+      applyActiveFilter();
+    });
+  }
+
+  // Cancel Custom Date Range
+  if (btnCancel) {
+    btnCancel.addEventListener('click', function() {
+      if (customModal) customModal.style.display = 'none';
+      if (dateSelect) dateSelect.value = currentGlobalFilter;
+    });
+  }
+
+  // Close custom popover on outside click
+  document.addEventListener('click', function(e) {
+    if (customModal && customModal.style.display === 'block') {
+      if (!customModal.contains(e.target) && !dateSelect.contains(e.target)) {
+        customModal.style.display = 'none';
+      }
+    }
+  });
+
+  // Initial immediate render at millisecond 0
+  applyActiveFilter();
+
+  // Live Firebase Integration with silent cache updating
+  if (typeof initDashboardStatsSync === 'function') {
+    initDashboardStatsSync(function(stats) {
+      if (!stats) return;
+      if (stats.rawUsers && stats.rawUsers.length > 0) {
+        cachedUsers = stats.rawUsers;
+        try { localStorage.setItem(USERS_CACHE_KEY, JSON.stringify(cachedUsers)); } catch (e) {}
+      }
+      if (stats.rawWithdrawals) {
+        cachedWithdrawals = stats.rawWithdrawals;
+      }
+      try {
+        localStorage.setItem(STATS_CACHE_KEY, JSON.stringify({
+          totalUsers: cachedUsers.length,
+          activeMiners: cachedUsers.filter(u => u.status === 'Active').length,
+          totalMinedUsdt: stats.totalMinedUsdt,
+          mrr: stats.mrr
+        }));
+      } catch (e) {}
+      applyActiveFilter();
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,948 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Users</title>
+<script src="./auth-guard.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="./firebase-service.js"></script>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+.nav-link:hover{background:#F1F5F9}
+.btn:hover{background:#F1F5F9}
+tbody tr:hover{background:#F8FAFC}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #0F766E;outline-offset:2px}
+</style>
+</helmet>
+<div style="font-family: 'Inter', system-ui, sans-serif; background: #F8FAFC; color: #0F172A; display: flex; flex-wrap: wrap">
+
+<aside style="position: sticky; top: 0; height: 100vh; overflow-y: auto; align-self: flex-start; flex: 0 0 248px; width: 248px; max-width: 248px; background: #FFFFFF; border-right: 1px solid #E2E8F0; padding: 24px 16px; display: flex; flex-direction: column; gap: 28px; z-index: 50;">
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 8px">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect width="24" height="24" rx="7" fill="#0F766E"></rect><path d="M12 4.5l6.5 3.75v7.5L12 19.5l-6.5-3.75v-7.5z" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"></path><path d="M9 10h6M12 10v5" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"></path></svg>
+<div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start">
+<div style="font-size: 15px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em">USDT Cloud Miner</div>
+<span style="font-size: 11px; font-weight: 600; color: #0F766E; background: #F0FDFA; border: 1px solid #99F6E4; border-radius: 999px; padding: 2px 8px">v1.2.0 Production</span>
+</div>
+</div>
+<nav aria-label="Main" style="display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #64748B; padding: 0 12px 8px">Admin console</div>
+<sc-for list="{{nav}}" as="item" hint-placeholder-count="6">
+<sc-if value="{{ item.isActive }}" hint-placeholder-val="{{ false }}">
+<a href="{{item.href}}" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600; color: #115E59; background: #CCFBF1">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{item.icon}}"></path></svg>
+<span>{{item.label}}</span>
+</a>
+</sc-if>
+<sc-if value="{{ item.notActive }}" hint-placeholder-val="{{ true }}">
+<a class="nav-link" href="{{item.href}}" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: #334155">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{item.icon}}"></path></svg>
+<span>{{item.label}}</span>
+<sc-if value="{{ item.hasBadge }}" hint-placeholder-val="{{ false }}">
+<span style="margin-left: auto; font-size: 12px; font-weight: 700; color: #92400E; background: #FEF3C7; border-radius: 999px; padding: 2px 8px">{{item.badge}}</span>
+</sc-if>
+</a>
+</sc-if>
+</sc-for>
+</nav>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px; padding-top: 16px; border-top: 1px solid #E2E8F0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #F8FAFC; border: 1px solid #E2E8F0">
+<div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1">
+<div aria-hidden="true" style="flex: none; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 999px; background: #0F766E; color: #FFFFFF; font-size: 13px; font-weight: 700">ZJ</div>
+<div style="min-width: 0; flex: 1">
+<div style="font-size: 13px; font-weight: 600; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Jay Zalavadiya</div>
+<div style="font-size: 11px; color: #64748B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis" title="zalavadiyajay3814@gmail.com">zalavadiyajay3814@gmail.com</div>
+</div>
+</div>
+<button class="btn" data-action="logout" type="button" title="Sign out" aria-label="Sign out" style="flex: none; width: 36px; height: 36px; border-radius: 8px; border: 1px solid #E2E8F0; background: #FFFFFF; color: #DC2626; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+<polyline points="16 17 21 12 16 7"></polyline>
+<line x1="21" y1="12" x2="9" y2="12"></line>
+</svg>
+</button>
+</div>
+</div>
+</aside>
+
+<main style="flex: 999 1 560px; min-width: 0; padding: 24px 32px 40px; display: flex; flex-direction: column; gap: 24px">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="flex: 1 1 320px; max-width: 520px; position: relative">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; left: 14px; top: 13px"><path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.3-4.3"></path></svg>
+<input type="search" aria-label="Search users" placeholder="Search by name, email or TRC-20 address" style="width: 100%; height: 44px; padding: 0 14px 0 42px; border: 1px solid #94A3B8; border-radius: 10px; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #0F172A">
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<span style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 10px; background: #F0FDF4; border: 1px solid #BBF7D0; font-size: 13px; font-weight: 600; color: #166534"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: #16A34A"></span>Firebase &bull; usdt-cloud-mining-c0fb3</span>
+<select aria-label="Date range" style="height: 44px; padding: 0 12px; border: 1px solid #94A3B8; border-radius: 10px; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #0F172A">
+<option>Today</option>
+<option>Yesterday</option>
+<option selected="">Last 7 days</option>
+<option>Last 30 days</option>
+<option>This month</option>
+<option>Custom range</option>
+</select>
+<div style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 10px; background: #F1F5F9; border: 1px solid #E2E8F0; font-size: 13px; font-weight: 600; color: #0F172A"><span style="width: 8px; height: 8px; border-radius: 999px; background: #0F766E"></span>Super Admin</div>
+</div>
+</header>
+
+<div id="users-list-view" style="display: flex; flex-direction: column; gap: 24px">
+<div>
+<h1 style="margin: 0; font-size: 28px; line-height: 1.2; font-weight: 700; letter-spacing: -0.02em">Users</h1>
+<p style="margin: 6px 0 0; font-size: 14px; color: #64748B">Look up miners, check wallets and manage plans.</p>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column">
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-bottom: 1px solid #E2E8F0">
+<div role="group" aria-label="User filter" style="display: flex; flex-wrap: wrap; gap: 8px">
+<button type="button" aria-pressed="true" data-category="all" style="min-height: 44px; padding: 0 14px; border: 1px solid #0F766E; border-radius: 10px; background: #0F766E; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">All users <span style="font-weight: 500">5</span></button>
+<button class="btn" type="button" data-category="starter" style="min-height: 44px; padding: 0 14px; border: 1px solid #CBD5E1; border-radius: 10px; background: #FFFFFF; color: #334155; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Starter Rig <span style="color: #64748B">3</span></button>
+<button class="btn" type="button" data-category="pro" style="min-height: 44px; padding: 0 14px; border: 1px solid #CBD5E1; border-radius: 10px; background: #FFFFFF; color: #334155; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Pro Rig <span style="color: #64748B">1</span></button>
+<button class="btn" type="button" data-category="enterprise" style="min-height: 44px; padding: 0 14px; border: 1px solid #CBD5E1; border-radius: 10px; background: #FFFFFF; color: #334155; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Enterprise ASIC <span style="color: #64748B">1</span></button>
+</div>
+<button class="btn" id="export-users-csv" type="button" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid #CBD5E1; border-radius: 10px; background: #FFFFFF; color: #0F172A; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12 M7 10l5 5 5-5 M4 21h16"></path></svg>
+Export to CSV
+</button>
+</div>
+
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px">
+<thead>
+<tr style="text-align: left; color: #64748B; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; background: #F8FAFC">
+<th scope="col" style="padding: 12px 8px 12px 20px; font-weight: 600">User</th>
+<th scope="col" style="padding: 12px 8px; font-weight: 600">Country</th>
+<th scope="col" style="padding: 12px 8px; font-weight: 600; text-align: right">Balance</th>
+<th scope="col" style="padding: 12px 8px; font-weight: 600">Rig</th>
+<th scope="col" style="padding: 12px 8px; font-weight: 600; text-align: right">Sessions</th>
+<th scope="col" style="padding: 12px 8px; font-weight: 600">Joined</th>
+<th scope="col" style="padding: 12px 8px; font-weight: 600">Status</th>
+<th scope="col" style="padding: 12px 20px 12px 8px; font-weight: 600; text-align: right">Action</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{users}}" as="u" hint-placeholder-count="8">
+<tr class="user-table-row" data-user-email="{{u.email}}" style="border-top: 1px solid #E2E8F0; cursor: pointer">
+<td style="padding: 10px 8px 10px 20px">
+<div style="display: flex; align-items: center; gap: 12px">
+<span aria-hidden="true" style="flex: none; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 999px; background: #CCFBF1; color: #115E59; font-size: 12px; font-weight: 700">{{u.initials}}</span>
+<div style="min-width: 0">
+<div style="font-weight: 600; color: #0F172A">{{u.name}}</div>
+<div style="font-size: 12px; color: #64748B">{{u.email}}</div>
+</div>
+</div>
+</td>
+<td style="padding: 10px 8px; color: #334155; font-weight: 500">{{u.cc}}</td>
+<td style="padding: 10px 8px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums">{{u.balance}} <span style="font-weight: 500; color: #64748B">USDT</span></td>
+<td style="padding: 10px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: {{u.rigBg}}; color: {{u.rigFg}}">{{u.rig}}</span></td>
+<td style="padding: 10px 8px; text-align: right; font-variant-numeric: tabular-nums">{{u.sessions}}</td>
+<td style="padding: 10px 8px; color: #334155; white-space: nowrap">{{u.joined}}</td>
+<td style="padding: 10px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; background: {{u.statusBg}}; color: {{u.statusFg}}">{{u.status}}</span></td>
+<td style="padding: 10px 20px 10px 8px; text-align: right"><button class="btn view-detail-btn" type="button" style="display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 0 10px; font-size: 12px; font-weight: 600; color: #0F766E; background: #F0FDFA; border: 1px solid #CCFBF1; border-radius: 8px; cursor: pointer">Details &rarr;</button></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-top: 1px solid #E2E8F0; font-size: 13px; color: #64748B">
+<span>Showing 1–5 of 5 registered miners</span>
+<div style="display: flex; gap: 8px">
+<button class="btn" type="button" style="min-height: 44px; padding: 0 16px; border: 1px solid #CBD5E1; border-radius: 10px; background: #FFFFFF; color: #334155; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Previous</button>
+<button class="btn" type="button" style="min-height: 44px; padding: 0 16px; border: 1px solid #CBD5E1; border-radius: 10px; background: #FFFFFF; color: #0F172A; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Next</button>
+</div>
+</div>
+</section>
+</div>
+
+<div id="user-details-view" style="display: none; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; align-items: center; gap: 14px">
+<button id="back-to-users-btn" class="btn" type="button" style="display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border: 1px solid #CBD5E1; border-radius: 10px; background: #FFFFFF; color: #0F172A; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+Back to Users
+</button>
+<div style="display: flex; align-items: center; gap: 8px; font-size: 14px">
+<span style="color: #64748B">Users</span>
+<span style="color: #CBD5E1">/</span>
+<span style="font-weight: 600; color: #0F172A" id="detail-breadcrumb-name">Maya Chen</span>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 10px">
+<span id="detail-status-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #DCFCE7; color: #166534">
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #16A34A"></span>
+Active Account
+</span>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px">
+<div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 22px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #64748B">Basic Information</div>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+</div>
+<div style="display: flex; align-items: center; gap: 14px">
+<div id="detail-avatar" aria-hidden="true" style="flex: none; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 999px; background: #CCFBF1; color: #115E59; font-size: 16px; font-weight: 700">MC</div>
+<div style="min-width: 0; flex: 1">
+<div id="detail-name" style="font-size: 16px; font-weight: 700; color: #0F172A">Maya Chen</div>
+<div id="detail-email" style="font-size: 13px; color: #64748B; margin-top: 2px">maya.chen@example.com</div>
+</div>
+</div>
+<div style="border-top: 1px solid #F1F5F9; padding-top: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 13px">
+<div style="display: flex; justify-content: space-between">
+<span style="color: #64748B">Country</span>
+<strong id="detail-country" style="color: #0F172A">United States (US)</strong>
+</div>
+<div style="display: flex; justify-content: space-between">
+<span style="color: #64748B">Joined Date</span>
+<strong id="detail-joined" style="color: #0F172A">22 Oct 2026</strong>
+</div>
+<div style="display: flex; justify-content: space-between">
+<span style="color: #64748B">Auth Provider</span>
+<strong style="color: #0F172A">Google Sign-In</strong>
+</div>
+</div>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 22px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #64748B">Mining Rig & Plan</div>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+</div>
+<div>
+<div style="font-size: 12px; color: #64748B">Current Assigned Plan</div>
+<div style="margin-top: 6px; display: flex; align-items: center; gap: 10px">
+<span id="detail-rig-badge" style="display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 14px; font-weight: 700; background: #CCFBF1; color: #115E59">Pro</span>
+<span id="detail-rig-speed" style="font-size: 13px; font-weight: 600; color: #0F766E">105 GH/s Hashrate</span>
+</div>
+</div>
+<div style="border-top: 1px solid #F1F5F9; padding-top: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 13px">
+<div style="display: flex; justify-content: space-between">
+<span style="color: #64748B">Rig Status</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: #166534">
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #16A34A"></span>
+Mining Active
+</span>
+</div>
+<div style="display: flex; justify-content: space-between">
+<span style="color: #64748B">Completed Sessions</span>
+<strong id="detail-sessions" style="color: #0F172A">24 sessions</strong>
+</div>
+<div style="display: flex; justify-content: space-between">
+<span style="color: #64748B">Daily Production</span>
+<strong id="detail-daily-prod" style="color: #0F172A">~1.450800 USDT / cycle</strong>
+</div>
+</div>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 22px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #64748B">Wallet & Balance</div>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+</div>
+<div>
+<div style="font-size: 12px; color: #64748B">Available Balance</div>
+<div id="detail-balance" style="margin-top: 4px; font-size: 26px; line-height: 1.1; font-weight: 700; color: #0F172A; font-variant-numeric: tabular-nums">
+34.821000 <span style="font-size: 15px; font-weight: 600; color: #0F766E">USDT</span>
+</div>
+</div>
+<div style="border-top: 1px solid #F1F5F9; padding-top: 14px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 12px; font-weight: 600; color: #64748B">TRC-20 Payout Wallet</div>
+<div style="display: flex; align-items: center; justify-content: space-between; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 6px 10px">
+<span id="detail-wallet" style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #334155">TR7NHqJEhGQt8kXp</span>
+<button id="copy-detail-wallet-btn" class="btn" type="button" title="Copy wallet" style="border: none; background: transparent; color: #64748B; cursor: pointer; padding: 2px 4px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 9h11v11H9z M5 15V5a1 1 0 0 1 1-1h10"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; border-bottom: 1px solid #E2E8F0">
+<div>
+<h2 style="margin: 0; font-size: 16px; font-weight: 700; color: #0F172A">Mining Sessions History</h2>
+<p style="margin: 4px 0 0; font-size: 13px; color: #64748B">Recorded mining cycles and cloud rewards for this user</p>
+</div>
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 6px; background: #F0FDFA; color: #0F766E; border: 1px solid #CCFBF1">Cycle Duration: 4 Hours</span>
+</div>
+</div>
+
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px">
+<thead>
+<tr style="text-align: left; color: #64748B; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; background: #F8FAFC">
+<th scope="col" style="padding: 12px 14px 12px 20px; font-weight: 600">#</th>
+<th scope="col" style="padding: 12px 14px; font-weight: 600">Started At</th>
+<th scope="col" style="padding: 12px 14px; font-weight: 600">Ended At</th>
+<th scope="col" style="padding: 12px 14px; font-weight: 600">Duration</th>
+<th scope="col" style="padding: 12px 14px; font-weight: 600; text-align: right">Reward (USDT)</th>
+<th scope="col" style="padding: 12px 20px 12px 14px; font-weight: 600">Status</th>
+</tr>
+</thead>
+<tbody id="detail-sessions-tbody">
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- Section 3: Coin Transfer History (P2P User-to-User) -->
+<section style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; border-bottom: 1px solid #E2E8F0">
+<div>
+<h2 style="margin: 0; font-size: 16px; font-weight: 700; color: #0F172A">Coin Transfer History</h2>
+<p style="margin: 4px 0 0; font-size: 13px; color: #64748B">Internal user-to-user coin transfers sent and received</p>
+</div>
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 6px; background: #F8FAFC; color: #475569; border: 1px solid #E2E8F0">Internal P2P Network</span>
+</div>
+</div>
+
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px">
+<thead>
+<tr style="text-align: left; color: #64748B; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; background: #F8FAFC">
+<th scope="col" style="padding: 12px 14px 12px 20px; font-weight: 600">#</th>
+<th scope="col" style="padding: 12px 14px; font-weight: 600">Type</th>
+<th scope="col" style="padding: 12px 14px; font-weight: 600">Counterparty User</th>
+<th scope="col" style="padding: 12px 14px; font-weight: 600">Wallet Address</th>
+<th scope="col" style="padding: 12px 14px; text-align: right; font-weight: 600">Amount (USDT)</th>
+<th scope="col" style="padding: 12px 14px; font-weight: 600">Date</th>
+<th scope="col" style="padding: 12px 20px 12px 14px; font-weight: 600">Status</th>
+</tr>
+</thead>
+<tbody id="detail-transfers-tbody">
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- Section 4: Withdrawal Requests History (500 USDT Barrier) -->
+<section style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; border-bottom: 1px solid #E2E8F0">
+<div>
+<h2 style="margin: 0; font-size: 16px; font-weight: 700; color: #0F172A">Withdrawal Requests History</h2>
+<p style="margin: 4px 0 0; font-size: 13px; color: #64748B">Payout requests submitted upon reaching the 500.00 USDT barrier</p>
+</div>
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 6px; background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A">Barrier: 500.00 USDT Minimum</span>
+</div>
+</div>
+
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px">
+<thead>
+<tr style="text-align: left; color: #64748B; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; background: #F8FAFC">
+<th scope="col" style="padding: 12px 14px 12px 20px; font-weight: 600">Request ID</th>
+<th scope="col" style="padding: 12px 14px; font-weight: 600">Date</th>
+<th scope="col" style="padding: 12px 14px; text-align: right; font-weight: 600">Requested Amount</th>
+<th scope="col" style="padding: 12px 14px; font-weight: 600">Destination TRC-20</th>
+<th scope="col" style="padding: 12px 14px; text-align: right; font-weight: 600">Net Payout</th>
+<th scope="col" style="padding: 12px 20px 12px 14px; font-weight: 600">Status</th>
+</tr>
+</thead>
+<tbody id="detail-withdrawals-tbody">
+</tbody>
+</table>
+</div>
+</section>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1060}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const active = 1;
+    const nav = [
+      { label: 'Dashboard', href: 'index.html', icon: 'M3 3h7v7H3z M14 3h7v7h-7z M14 14h7v7h-7z M3 14h7v7H3z' },
+      { label: 'Users', href: 'Users.dc.html', icon: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75' },
+      { label: 'Subscriptions', href: 'Subscriptions.dc.html', icon: 'M3 6h18v12H3z M3 10h18' },
+      { label: 'Withdrawals', href: 'Withdrawals.dc.html', icon: 'M7 17L17 7 M7 7h10v10', badge: '3' },
+      { label: 'Notifications', href: 'Notifications.dc.html', icon: 'M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9 M13.73 21a2 2 0 0 1-3.46 0' },
+      { label: 'Settings', href: 'Settings.dc.html', icon: 'M4 21v-7 M4 10V3 M12 21v-9 M12 8V3 M20 21v-5 M20 12V3 M1 14h6 M9 8h6 M17 16h6' }
+    ].map((n, i) => ({ ...n, isActive: i === active, notActive: i !== active, hasBadge: !!n.badge }));
+
+    const rigs = {
+      free: { bg: '#F1F5F9', fg: '#475569' },
+      starter: { bg: '#F0FDFA', fg: '#0F766E' },
+      pro: { bg: '#CCFBF1', fg: '#115E59' },
+      enterprise: { bg: '#FEF3C7', fg: '#92400E' }
+    };
+    const rigLabel = { free: 'Free Plan', starter: 'Starter', pro: 'Pro', enterprise: 'Enterprise' };
+    const rows = [
+      ['Alex Rivera', 'alex.rivera@example.com', 'US', 'TR7NHq…10M', '42.500000', 'starter', 38, '22 Oct 2026', true],
+      ['Priya Sharma', 'priya.sharma@example.com', 'IN', 'TLa2f9…s9J', '185.750000', 'pro', 84, '20 Oct 2026', true],
+      ['Marcus Vance', 'marcus.vance@example.com', 'GB', 'TKp3Vb…1W0K', '520.000000', 'enterprise', 142, '15 Oct 2026', true],
+      ['Kenji Sato', 'kenji.sato@example.com', 'JP', 'TY9mRt…9Z4L', '15.200000', 'starter', 12, '24 Oct 2026', true]
+    ];
+    const users = rows.map((r) => ({
+      name: r[0],
+      initials: r[0].split(' ').map((w) => w[0]).join(''),
+      email: r[1], cc: r[2], wallet: r[3], balance: r[4],
+      rig: rigLabel[r[5]], rigBg: rigs[r[5]].bg, rigFg: rigs[r[5]].fg,
+      sessions: r[6], joined: r[7],
+      status: r[8] ? 'Active' : 'Suspended',
+      statusBg: r[8] ? '#DCFCE7' : '#FEE2E2',
+      statusFg: r[8] ? '#166534' : '#991B1B'
+    }));
+
+    return { nav, users };
+  }
+}
+</script>
+<script>
+(function() {
+  let activeCategory = 'all';
+
+  const userDetailsMap = {
+    'alex.rivera@example.com': {
+      name: 'Alex Rivera',
+      email: 'alex.rivera@example.com',
+      initials: 'AR',
+      cc: 'United States (US)',
+      wallet: 'TR7NHqJEhGQt8kXpB32V8x10M',
+      balance: '42.500000',
+      rig: 'Starter',
+      rigBg: '#F0FDFA',
+      rigFg: '#0F766E',
+      hashrate: '60 GH/s Hashrate',
+      sessions: '38',
+      dailyProd: '~0.828000 USDT / cycle',
+      joined: '22 Oct 2026',
+      status: 'Active',
+      statusBg: '#DCFCE7',
+      statusFg: '#166534',
+      history: [
+        { id: 1, start: '25 Oct 2026, 09:00', end: '25 Oct 2026, 13:00', duration: '4h 00m', reward: '+0.828000', status: 'Active' },
+        { id: 2, start: '24 Oct 2026, 14:00', end: '24 Oct 2026, 18:00', duration: '4h 00m', reward: '+0.828000', status: 'Completed' },
+        { id: 3, start: '24 Oct 2026, 08:30', end: '24 Oct 2026, 12:30', duration: '4h 00m', reward: '+0.828000', status: 'Completed' }
+      ],
+      transfers: [
+        { id: 'TX-0992', type: 'Received', user: 'Kenji Sato', email: 'kenji.sato@example.com', wallet: 'TY9mRt2x5Lcx0P3q8W1K9Z4L', amount: '+10.000000', date: '24 Oct 2026, 10:15 AM', status: 'Completed' }
+      ],
+      withdrawals: []
+    },
+    'priya.sharma@example.com': {
+      name: 'Priya Sharma',
+      email: 'priya.sharma@example.com',
+      initials: 'PS',
+      cc: 'India (IN)',
+      wallet: 'TLa2f9Qm4Z7yX8vP1k3R5s9J',
+      balance: '185.750000',
+      rig: 'Pro',
+      rigBg: '#CCFBF1',
+      rigFg: '#115E59',
+      hashrate: '105 GH/s Hashrate',
+      sessions: '84',
+      dailyProd: '~1.450800 USDT / cycle',
+      joined: '20 Oct 2026',
+      status: 'Active',
+      statusBg: '#DCFCE7',
+      statusFg: '#166534',
+      history: [
+        { id: 1, start: '25 Oct 2026, 10:00', end: '25 Oct 2026, 14:00', duration: '4h 00m', reward: '+1.450800', status: 'Active' },
+        { id: 2, start: '24 Oct 2026, 15:30', end: '24 Oct 2026, 19:30', duration: '4h 00m', reward: '+1.450800', status: 'Completed' }
+      ],
+      transfers: [],
+      withdrawals: []
+    },
+    'marcus.vance@example.com': {
+      name: 'Marcus Vance',
+      email: 'marcus.vance@example.com',
+      initials: 'MV',
+      cc: 'United Kingdom (GB)',
+      wallet: 'TKp3VbmY2eHs9Q5x8R2J1W0K',
+      balance: '520.000000',
+      rig: 'Enterprise',
+      rigBg: '#FEF3C7',
+      rigFg: '#92400E',
+      hashrate: '150 GH/s Hashrate',
+      sessions: '142',
+      dailyProd: '~2.072000 USDT / cycle',
+      joined: '15 Oct 2026',
+      status: 'Active',
+      statusBg: '#DCFCE7',
+      statusFg: '#166534',
+      history: [
+        { id: 1, start: '25 Oct 2026, 08:00', end: '25 Oct 2026, 12:00', duration: '4h 00m', reward: '+2.072000', status: 'Active' },
+        { id: 2, start: '24 Oct 2026, 13:00', end: '24 Oct 2026, 17:00', duration: '4h 00m', reward: '+2.072000', status: 'Completed' }
+      ],
+      transfers: [],
+      withdrawals: [
+        { id: '#WD-1085', date: '24 Oct 2026, 02:40 PM', amount: '500.000000', wallet: 'TKp3VbmY2eHs9Q5x8R2J1W0K', fee: '2.000000', net: '498.000000', status: 'Pending' }
+      ]
+    },
+    'kenji.sato@example.com': {
+      name: 'Kenji Sato',
+      email: 'kenji.sato@example.com',
+      initials: 'KS',
+      cc: 'Japan (JP)',
+      wallet: 'TY9mRt2x5Lcx0P3q8W1K9Z4L',
+      balance: '15.200000',
+      rig: 'Starter',
+      rigBg: '#F0FDFA',
+      rigFg: '#0F766E',
+      hashrate: '60 GH/s Hashrate',
+      sessions: '12',
+      dailyProd: '~0.828000 USDT / cycle',
+      joined: '24 Oct 2026',
+      status: 'Active',
+      statusBg: '#DCFCE7',
+      statusFg: '#166534',
+      history: [
+        { id: 1, start: '25 Oct 2026, 11:00', end: '25 Oct 2026, 15:00', duration: '4h 00m', reward: '+0.828000', status: 'Active' }
+      ],
+      transfers: [
+        { id: 'TX-0992', type: 'Sent', user: 'Alex Rivera', email: 'alex.rivera@example.com', wallet: 'TR7NHqJEhGQt8kXpB32V8x10M', amount: '-10.000000', date: '24 Oct 2026, 10:15 AM', status: 'Completed' }
+      ],
+      withdrawals: []
+    }
+  }
+
+  function applyFilter() {
+    const table = document.querySelector('table');
+    if (!table) return;
+    const searchInput = document.querySelector('input[type="search"]');
+    const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+    const rows = table.querySelectorAll('tbody tr');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      let matchesCat = true;
+      if (activeCategory === 'starter') matchesCat = text.includes('starter');
+      else if (activeCategory === 'pro') matchesCat = text.includes('pro');
+      else if (activeCategory === 'enterprise') matchesCat = text.includes('enterprise');
+
+      const matchesSearch = !query || text.includes(query);
+
+      if (matchesCat && matchesSearch) {
+        row.style.display = '';
+        visibleCount++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    const footerSpan = document.querySelector('section > div:last-child span');
+    if (footerSpan) {
+      if (activeCategory === 'all' && !query) {
+        footerSpan.textContent = 'Showing 1–8 of 43,158 users';
+      } else {
+        const catLabels = { starter: 'Starter Rig', pro: 'Pro Rig', enterprise: 'Enterprise ASIC' };
+        const label = catLabels[activeCategory] || 'users';
+        footerSpan.textContent = `Showing ${visibleCount} ${label} users`;
+      }
+    }
+  }
+
+  function showUserDetails(email) {
+    const user = userDetailsMap[email] || {
+      name: 'User',
+      email: email,
+      initials: 'U',
+      cc: 'Global',
+      wallet: 'TR7NHqJEhGQt8kXp...',
+      balance: '0.000000',
+      rig: 'Free Plan',
+      rigBg: '#F1F5F9',
+      rigFg: '#475569',
+      hashrate: '30 GH/s Hashrate',
+      sessions: '0',
+      dailyProd: '~0.414000 USDT / cycle',
+      joined: 'Recently',
+      status: 'Active',
+      statusBg: '#DCFCE7',
+      statusFg: '#166534',
+      history: []
+    };
+
+    const listView = document.getElementById('users-list-view');
+    const detailView = document.getElementById('user-details-view');
+    if (!listView || !detailView) return;
+
+    // Populate Detail View
+    document.getElementById('detail-breadcrumb-name').textContent = user.name;
+    document.getElementById('detail-name').textContent = user.name;
+    document.getElementById('detail-email').textContent = user.email;
+    document.getElementById('detail-avatar').textContent = user.initials;
+    document.getElementById('detail-country').textContent = user.cc;
+    document.getElementById('detail-joined').textContent = user.joined;
+
+    const statusPill = document.getElementById('detail-status-pill');
+    statusPill.style.background = user.statusBg;
+    statusPill.style.color = user.statusFg;
+    statusPill.innerHTML = `<span style="width: 8px; height: 8px; border-radius: 999px; background: ${user.status === 'Active' ? '#16A34A' : '#DC2626'}"></span> ${user.status} Account`;
+
+    const rigBadge = document.getElementById('detail-rig-badge');
+    rigBadge.textContent = user.rig;
+    rigBadge.style.background = user.rigBg;
+    rigBadge.style.color = user.rigFg;
+
+    document.getElementById('detail-rig-speed').textContent = user.hashrate;
+    document.getElementById('detail-sessions').textContent = `${user.sessions} sessions`;
+    document.getElementById('detail-daily-prod').textContent = user.dailyProd;
+    document.getElementById('detail-balance').innerHTML = `${user.balance} <span style="font-size: 15px; font-weight: 600; color: #0F766E">USDT</span>`;
+    document.getElementById('detail-wallet').textContent = user.wallet;
+
+    // Populate Sessions Table
+    const tbody = document.getElementById('detail-sessions-tbody');
+    if (tbody) {
+      if (!user.history || user.history.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="padding: 24px; text-align: center; color: #64748B;">No mining sessions recorded yet</td></tr>';
+      } else {
+        tbody.innerHTML = user.history.map(s => `
+          <tr style="border-top: 1px solid #E2E8F0">
+            <td style="padding: 12px 14px 12px 20px; font-weight: 600; color: #64748B">${s.id}</td>
+            <td style="padding: 12px 14px; color: #334155">${s.start}</td>
+            <td style="padding: 12px 14px; color: #334155">${s.end}</td>
+            <td style="padding: 12px 14px; color: #64748B; font-weight: 500">${s.duration}</td>
+            <td style="padding: 12px 14px; text-align: right; font-weight: 600; color: #0F766E; font-variant-numeric: tabular-nums">${s.reward} USDT</td>
+            <td style="padding: 12px 20px 12px 14px">
+              <span style="display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; background: ${s.status === 'Active' ? '#DCFCE7' : (s.status === 'Completed' ? '#F1F5F9' : '#FEE2E2')}; color: ${s.status === 'Active' ? '#166534' : (s.status === 'Completed' ? '#475569' : '#991B1B')}">
+                ${s.status}
+              </span>
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    // Populate Transfers Table
+    const transferTbody = document.getElementById('detail-transfers-tbody');
+    if (transferTbody) {
+      if (!user.transfers || user.transfers.length === 0) {
+        transferTbody.innerHTML = '<tr><td colspan="7" style="padding: 24px; text-align: center; color: #64748B;">No coin transfers recorded for this user yet</td></tr>';
+      } else {
+        transferTbody.innerHTML = user.transfers.map(t => `
+          <tr style="border-top: 1px solid #E2E8F0">
+            <td style="padding: 12px 14px 12px 20px; font-weight: 600; color: #64748B">${t.id}</td>
+            <td style="padding: 12px 14px">
+              <span style="display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; background: ${t.type === 'Received' ? '#DCFCE7' : '#FEE2E2'}; color: ${t.type === 'Received' ? '#166534' : '#991B1B'}">
+                ${t.type === 'Received' ? '↓ Received' : '↑ Sent'}
+              </span>
+            </td>
+            <td style="padding: 12px 14px; font-weight: 600; color: #0F172A">${t.user} <span style="font-weight: 400; font-size: 12px; color: #64748B">(${t.email})</span></td>
+            <td style="padding: 12px 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #334155">${t.wallet}</td>
+            <td style="padding: 12px 14px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; color: ${t.type === 'Received' ? '#0F766E' : '#DC2626'}">${t.amount} USDT</td>
+            <td style="padding: 12px 14px; color: #64748B">${t.date}</td>
+            <td style="padding: 12px 20px 12px 14px">
+              <span style="display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; background: #DCFCE7; color: #166534">${t.status}</span>
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    // Populate Withdrawals Table (500 USDT barrier)
+    const wdTbody = document.getElementById('detail-withdrawals-tbody');
+    if (wdTbody) {
+      if (!user.withdrawals || user.withdrawals.length === 0) {
+        const balNum = parseFloat(user.balance || 0);
+        const remaining = Math.max(0, 500 - balNum).toFixed(2);
+        wdTbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="padding: 24px 20px; text-align: center; color: #64748B;">
+              <div style="display: inline-flex; flex-direction: column; align-items: center; gap: 6px">
+                <span style="font-weight: 600; color: #0F172A">No withdrawal requests submitted yet</span>
+                <span style="font-size: 13px; color: #64748B">User balance is <strong>${user.balance} USDT</strong>. Requires 500.00 USDT barrier threshold to submit a payout request (${remaining} USDT remaining).</span>
+              </div>
+            </td>
+          </tr>
+        `;
+      } else {
+        wdTbody.innerHTML = user.withdrawals.map(w => `
+          <tr style="border-top: 1px solid #E2E8F0">
+            <td style="padding: 12px 14px 12px 20px; font-weight: 600; color: #0F766E">${w.id}</td>
+            <td style="padding: 12px 14px; color: #334155">${w.date}</td>
+            <td style="padding: 12px 14px; text-align: right; font-weight: 600; color: #0F172A; font-variant-numeric: tabular-nums">${w.amount} USDT</td>
+            <td style="padding: 12px 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #334155">${w.wallet}</td>
+            <td style="padding: 12px 14px; text-align: right; font-weight: 700; color: #0F766E; font-variant-numeric: tabular-nums">${w.net} USDT</td>
+            <td style="padding: 12px 20px 12px 14px">
+              <span style="display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; background: ${w.status.includes('Approved') || w.status.includes('Paid') ? '#DCFCE7' : (w.status.includes('Pending') ? '#FEF3C7' : '#FEE2E2')}; color: ${w.status.includes('Approved') || w.status.includes('Paid') ? '#166534' : (w.status.includes('Pending') ? '#92400E' : '#991B1B')}">
+                ${w.status}
+              </span>
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    // Toggle Views
+    listView.style.display = 'none';
+    detailView.style.display = 'flex';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Fetch live transfers and withdrawals from Firebase for this specific user
+    if (typeof fetchUserRecords === 'function') {
+      fetchUserRecords(email, function(records) {
+        if (records.transfers && records.transfers.length > 0 && transferTbody) {
+          user.transfers = records.transfers;
+          transferTbody.innerHTML = user.transfers.map(t => `
+            <tr style="border-top: 1px solid #E2E8F0">
+              <td style="padding: 12px 14px 12px 20px; font-weight: 600; color: #64748B">${t.id}</td>
+              <td style="padding: 12px 14px">
+                <span style="display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; background: ${t.type === 'Received' ? '#DCFCE7' : '#FEE2E2'}; color: ${t.type === 'Received' ? '#166534' : '#991B1B'}">
+                  ${t.type === 'Received' ? '&darr; Received' : '&uarr; Sent'}
+                </span>
+              </td>
+              <td style="padding: 12px 14px; font-weight: 600; color: #0F172A">${t.user} <span style="font-weight: 400; font-size: 12px; color: #64748B">(${t.email})</span></td>
+              <td style="padding: 12px 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #334155">${t.wallet}</td>
+              <td style="padding: 12px 14px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; color: ${t.type === 'Received' ? '#0F766E' : '#DC2626'}">${t.amount} USDT</td>
+              <td style="padding: 12px 14px; color: #64748B">${t.date}</td>
+              <td style="padding: 12px 20px 12px 14px">
+                <span style="display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; background: #DCFCE7; color: #166534">${t.status}</span>
+              </td>
+            </tr>
+          `).join('');
+        }
+
+        if (records.withdrawals && records.withdrawals.length > 0 && wdTbody) {
+          user.withdrawals = records.withdrawals;
+          wdTbody.innerHTML = user.withdrawals.map(w => `
+            <tr style="border-top: 1px solid #E2E8F0">
+              <td style="padding: 12px 14px 12px 20px; font-weight: 600; color: #0F766E">${w.id}</td>
+              <td style="padding: 12px 14px; color: #334155">${w.date}</td>
+              <td style="padding: 12px 14px; text-align: right; font-weight: 600; color: #0F172A; font-variant-numeric: tabular-nums">${w.amount} USDT</td>
+              <td style="padding: 12px 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #334155">${w.wallet}</td>
+              <td style="padding: 12px 14px; text-align: right; font-weight: 700; color: #0F766E; font-variant-numeric: tabular-nums">${w.net} USDT</td>
+              <td style="padding: 12px 20px 12px 14px">
+                <span style="display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; background: ${w.status.includes('Approved') || w.status.includes('Paid') ? '#DCFCE7' : (w.status.includes('Pending') ? '#FEF3C7' : '#FEE2E2')}; color: ${w.status.includes('Approved') || w.status.includes('Paid') ? '#166534' : (w.status.includes('Pending') ? '#92400E' : '#991B1B')}">
+                  ${w.status}
+                </span>
+              </td>
+            </tr>
+          `).join('');
+        }
+      });
+    }
+  }
+
+  function hideUserDetails() {
+    const listView = document.getElementById('users-list-view');
+    const detailView = document.getElementById('user-details-view');
+    if (!listView || !detailView) return;
+    detailView.style.display = 'none';
+    listView.style.display = 'flex';
+  }
+
+  document.addEventListener('click', (e) => {
+    // Back to Users button
+    if (e.target.closest('#back-to-users-btn')) {
+      e.preventDefault();
+      hideUserDetails();
+      return;
+    }
+
+    // Copy detail wallet button
+    const copyDetailWallet = e.target.closest('#copy-detail-wallet-btn');
+    if (copyDetailWallet) {
+      e.preventDefault();
+      const walletText = document.getElementById('detail-wallet').textContent.trim();
+      navigator.clipboard.writeText(walletText).then(() => {
+        const originalSvg = copyDetailWallet.innerHTML;
+        copyDetailWallet.innerHTML = '<span style="color:#0F766E;font-size:11px;font-weight:700">Copied</span>';
+        setTimeout(() => { copyDetailWallet.innerHTML = originalSvg; }, 1500);
+      }).catch(() => {});
+      return;
+    }
+
+    // Click on User Row or Details button
+    const userRow = e.target.closest('.user-table-row') || e.target.closest('tr[data-user-email]') || e.target.closest('tbody tr');
+    if (userRow && !e.target.closest('button[data-category]') && !e.target.closest('#export-users-csv')) {
+      const emailElem = userRow.querySelector('td:first-child div div div:last-child');
+      const email = userRow.getAttribute('data-user-email') || (emailElem ? emailElem.textContent.trim() : null);
+      if (email && userDetailsMap[email]) {
+        showUserDetails(email);
+        return;
+      }
+    }
+
+    // Category button click
+    const btn = e.target.closest('[data-category]');
+    if (btn) {
+      activeCategory = btn.getAttribute('data-category');
+      document.querySelectorAll('[data-category]').forEach(b => {
+        b.style.background = '#FFFFFF';
+        b.style.color = '#334155';
+        b.style.borderColor = '#CBD5E1';
+        b.style.fontWeight = '500';
+        b.setAttribute('aria-pressed', 'false');
+        const countSpan = b.querySelector('span');
+        if (countSpan) countSpan.style.color = '#64748B';
+      });
+      btn.style.background = '#0F766E';
+      btn.style.color = '#FFFFFF';
+      btn.style.borderColor = '#0F766E';
+      btn.style.fontWeight = '600';
+      btn.setAttribute('aria-pressed', 'true');
+      const activeSpan = btn.querySelector('span');
+      if (activeSpan) activeSpan.style.color = '#FFFFFF';
+
+      applyFilter();
+    }
+
+    // Export CSV click
+    const exportBtn = e.target.closest('#export-users-csv');
+    if (exportBtn) {
+      const csv = [
+        ['User', 'Email', 'Country', 'Balance (USDT)', 'Rig Plan', 'Sessions', 'Joined', 'Status'],
+        ['Maya Chen', 'maya.chen@example.com', 'US', '34.821000', 'Pro', '24', '22 Oct 2026', 'Active'],
+        ['Arjun Patel', 'arjun.patel@example.com', 'IN', '12.504200', 'Free Plan', '112', '21 Oct 2026', 'Active'],
+        ['Chinedu Okafor', 'chinedu.o@example.com', 'NG', '0.083100', 'Free Plan', '7', '20 Oct 2026', 'Active'],
+        ['Lucas Almeida', 'lucas.almeida@example.com', 'BR', '128.440000', 'Enterprise', '301', '19 Oct 2026', 'Active'],
+        ['Sofia Reyes', 'sofia.reyes@example.com', 'PH', '5.219800', 'Starter', '58', '17 Oct 2026', 'Active'],
+        ['Dmitri Volkov', 'd.volkov@example.com', 'ID', '0.000000', 'Free Plan', '3', '15 Oct 2026', 'Suspended'],
+        ['Amara Nwosu', 'amara.nwosu@example.com', 'NG', '71.032500', 'Pro', '96', '12 Oct 2026', 'Active'],
+        ['Ethan Brooks', 'ethan.brooks@example.com', 'US', '9.870000', 'Starter', '41', '09 Oct 2026', 'Active']
+      ].map(e => e.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `users_${activeCategory}_export.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  });
+
+  document.addEventListener('input', (e) => {
+    if (e.target && e.target.type === 'search') {
+      applyFilter();
+    }
+  });
+
+  // Connect to live Firebase Firestore (usdt-cloud-mining-c0fb3)
+  
+  // Restore live users from cache immediately in 0ms
+  try {
+    const cachedUsersJson = localStorage.getItem('usdt_admin_users_v2');
+    if (cachedUsersJson) {
+      const uList = JSON.parse(cachedUsersJson);
+      if (uList && uList.length > 0) {
+        const table = document.querySelector('table');
+        if (table) {
+          const tbody = table.querySelector('tbody');
+          if (tbody) {
+            tbody.innerHTML = uList.map(function(u) {
+              return `
+                <tr class="user-table-row" data-user-email="${u.email}" style="border-top: 1px solid #E2E8F0; cursor: pointer">
+                  <td style="padding: 10px 8px 10px 20px">
+                    <div style="display: flex; align-items: center; gap: 12px">
+                      <span aria-hidden="true" style="flex: none; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 999px; background: ${u.rigBg}; color: ${u.rigFg}; font-size: 12px; font-weight: 700">${u.initials}</span>
+                      <div style="min-width: 0">
+                        <div style="font-weight: 600; color: #0F172A">${u.name}</div>
+                        <div style="font-size: 12px; color: #64748B">${u.email}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="padding: 10px 8px; color: #334155; font-weight: 500">${u.cc}</td>
+                  <td style="padding: 10px 8px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums">${u.balance} <span style="font-weight: 500; color: #64748B">USDT</span></td>
+                  <td style="padding: 10px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: ${u.rigBg}; color: ${u.rigFg}">${u.rig}</span></td>
+                  <td style="padding: 10px 8px; text-align: right; font-variant-numeric: tabular-nums">${u.sessions}</td>
+                  <td style="padding: 10px 8px; color: #334155; white-space: nowrap">${u.joined}</td>
+                  <td style="padding: 10px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; background: ${u.statusBg}; color: ${u.statusFg}">${u.status}</span></td>
+                  <td style="padding: 10px 20px 10px 8px; text-align: right"><button class="btn view-detail-btn" type="button" style="display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 0 10px; font-size: 12px; font-weight: 600; color: #0F766E; background: #F0FDFA; border: 1px solid #CCFBF1; border-radius: 8px; cursor: pointer">Details &rarr;</button></td>
+                </tr>
+              `;
+            }).join('');
+          }
+        }
+      }
+    }
+  } catch (e) {}
+
+  if (typeof initLiveFirebaseSync === 'function') {
+    initLiveFirebaseSync(function(liveUsers) {
+      if (!liveUsers || liveUsers.length === 0) return;
+
+      liveUsers.forEach(function(u) {
+        userDetailsMap[u.email] = {
+          name: u.name,
+          email: u.email,
+          initials: u.initials,
+          cc: u.cc,
+          wallet: u.wallet,
+          balance: u.balance,
+          rig: u.rig,
+          rigBg: u.rigBg,
+          rigFg: u.rigFg,
+          hashrate: u.hashrate,
+          sessions: u.sessions,
+          dailyProd: u.dailyProd,
+          joined: u.joined,
+          status: u.status,
+          statusBg: u.statusBg,
+          statusFg: u.statusFg,
+          history: [
+            { id: 1, start: 'Live Session', end: 'Running', duration: 'Active', reward: '+' + (parseFloat(u.balance || 0) * 0.05).toFixed(6), status: 'Active' }
+          ],
+          transfers: [],
+          withdrawals: []
+        };
+      });
+
+      const starterCount = liveUsers.filter(u => u.rig === 'Starter').length;
+      const proCount = liveUsers.filter(u => u.rig === 'Pro').length;
+      const entCount = liveUsers.filter(u => u.rig === 'Enterprise').length;
+
+      const starterBtn = document.querySelector('button[data-category="starter"] span');
+      if (starterBtn) starterBtn.textContent = starterCount;
+      const proBtn = document.querySelector('button[data-category="pro"] span');
+      if (proBtn) proBtn.textContent = proCount;
+      const entBtn = document.querySelector('button[data-category="enterprise"] span');
+      if (entBtn) entBtn.textContent = entCount;
+      const allBtn = document.querySelector('button[data-category="all"] span');
+      if (allBtn) allBtn.textContent = liveUsers.length;
+
+      const table = document.querySelector('table');
+      if (table) {
+        const tbody = table.querySelector('tbody');
+        if (tbody) {
+          tbody.innerHTML = liveUsers.map(function(u) {
+            return `
+              <tr class="user-table-row" data-user-email="${u.email}" style="border-top: 1px solid #E2E8F0; cursor: pointer">
+                <td style="padding: 10px 8px 10px 20px">
+                  <div style="display: flex; align-items: center; gap: 12px">
+                    <span aria-hidden="true" style="flex: none; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 999px; background: #CCFBF1; color: #115E59; font-size: 12px; font-weight: 700">${u.initials}</span>
+                    <div style="min-width: 0">
+                      <div style="font-weight: 600; color: #0F172A">${u.name}</div>
+                      <div style="font-size: 12px; color: #64748B">${u.email}</div>
+                    </div>
+                  </div>
+                </td>
+                <td style="padding: 10px 8px; color: #334155; font-weight: 500">${u.cc}</td>
+                <td style="padding: 10px 8px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums">${u.balance} <span style="font-weight: 500; color: #64748B">USDT</span></td>
+                <td style="padding: 10px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: ${u.rigBg}; color: ${u.rigFg}">${u.rig}</span></td>
+                <td style="padding: 10px 8px; text-align: right; font-variant-numeric: tabular-nums">${u.sessions}</td>
+                <td style="padding: 10px 8px; color: #334155; white-space: nowrap">${u.joined}</td>
+                <td style="padding: 10px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; background: ${u.statusBg}; color: ${u.statusFg}">${u.status}</span></td>
+                <td style="padding: 10px 20px 10px 8px; text-align: right"><button class="btn view-detail-btn" type="button" style="display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 0 10px; font-size: 12px; font-weight: 600; color: #0F766E; background: #F0FDFA; border: 1px solid #CCFBF1; border-radius: 8px; cursor: pointer">Details &rarr;</button></td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      applyFilter();
+    });
+  }
+})();
+</script>
+</body>
+</html>

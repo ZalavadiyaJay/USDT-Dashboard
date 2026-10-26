@@ -1,0 +1,121 @@
+/* USDT Cloud Miner Admin Dashboard Stylesheet */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #F8FAFC;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Tab Links Hover & Active */
+.nav-tab-link:hover {
+  background-color: #F1F5F9 !important;
+  color: #0F172A !important;
+}
+
+.nav-tab-link.active {
+  background-color: #CCFBF1 !important;
+  color: #115E59 !important;
+  font-weight: 600 !important;
+}
+
+.nav-tab-link.active svg {
+  stroke: #115E59 !important;
+}
+
+/* User Segment Tabs */
+.user-filter-tab {
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.user-filter-tab:hover {
+  color: #0F172A !important;
+}
+.user-filter-tab.active {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  font-weight: 600 !important;
+}
+
+/* Table Hover Effect */
+table tr:hover td {
+  background-color: #F8FAFC;
+}
+
+/* Buttons Hover */
+button {
+  transition: all 0.15s ease;
+}
+button:hover {
+  filter: brightness(0.96);
+}
+button:active {
+  transform: scale(0.98);
+}
+
+/* Toast Animation */
+.toast-item {
+  animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Status Dot Pulse */
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.15);
+  }
+}
+
+.pulse-dot {
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+/* Fixed Sticky Sidebar */
+aside {
+  position: sticky !important;
+  top: 0 !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+  align-self: flex-start !important;
+  flex: 0 0 248px !important;
+  width: 248px !important;
+  max-width: 248px !important;
+  z-index: 50 !important;
+}
