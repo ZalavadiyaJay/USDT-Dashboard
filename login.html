@@ -223,14 +223,47 @@
 </div>
 
 <script>
-  // Check if already authenticated
-  fetch('/api/session')
-    .then(r => r.ok ? r.json() : null)
-    .then(data => {
-      if (data && data.authenticated) {
-        window.location.replace('/index.html');
+  const SESSION_KEY = 'usdt_admin_session';
+  const LOCAL_ACTIVE_KEY = 'usdt_admin_session_active';
+  const ADMIN_EMAIL = 'zalavadiyajay3814@gmail.com';
+  const VALID_HASH = '6476d17c9993d9f792daf714063e1e539203a77b2e51acfd6772396d7b7a1e9c';
+
+  async function computeSha256(str) {
+    try {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(str);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function isLocallyLoggedIn() {
+    try {
+      const sess = sessionStorage.getItem(SESSION_KEY);
+      if (sess) {
+        const parsed = JSON.parse(sess);
+        if (parsed && parsed.email && parsed.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) return true;
       }
-    }).catch(() => {});
+      if (localStorage.getItem(LOCAL_ACTIVE_KEY) === 'true') return true;
+    } catch (e) {}
+    return false;
+  }
+
+  // Check if already authenticated
+  if (isLocallyLoggedIn()) {
+    window.location.replace('/index.html');
+  } else {
+    fetch('/api/session')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data && data.authenticated) {
+          window.location.replace('/index.html');
+        }
+      }).catch(() => {});
+  }
 
   // Toggle password visibility
   const toggleBtn = document.getElementById('toggle-pw-btn');
@@ -245,7 +278,7 @@
       </svg>
     ` : `
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
         <circle cx="12" cy="12" r="3"></circle>
       </svg>
     `;
@@ -267,6 +300,27 @@
     const email = document.getElementById('admin-email').value.trim();
     const password = document.getElementById('admin-password').value;
 
+    function handleSuccess() {
+      try {
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+          email: email,
+          name: 'Jay Zalavadiya',
+          loggedAt: Date.now()
+        }));
+        localStorage.setItem(LOCAL_ACTIVE_KEY, 'true');
+      } catch (err) {}
+      btnText.textContent = 'Redirecting...';
+      window.location.replace('/index.html');
+    }
+
+    function handleFailure(msg) {
+      errorMessage.textContent = msg || 'Access denied: invalid credentials';
+      errorAlert.style.display = 'flex';
+      submitBtn.disabled = false;
+      btnText.textContent = 'Sign In';
+    }
+
+    // 1. Try server API first
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
@@ -274,22 +328,37 @@
         body: JSON.stringify({ email, password })
       });
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        btnText.textContent = 'Redirecting...';
-        window.location.replace('/index.html');
-      } else {
-        errorMessage.textContent = data.error || 'Access denied: invalid credentials';
-        errorAlert.style.display = 'flex';
-        submitBtn.disabled = false;
-        btnText.textContent = 'Sign In';
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.success) {
+          handleSuccess();
+          return;
+        } else {
+          handleFailure(data.error);
+          return;
+        }
+      } else if (response.status === 401) {
+        handleFailure('Access denied: invalid credentials');
+        return;
       }
-    } catch (err) {
-      errorMessage.textContent = 'Connection error. Please try again.';
-      errorAlert.style.display = 'flex';
-      submitBtn.disabled = false;
-      btnText.textContent = 'Sign In';
+    } catch (networkErr) {
+      // Server not reachable (static host)
+    }
+
+    // 2. Static Host Cryptographic Fallback (Cloudflare Pages CDN)
+    try {
+      const hash = await computeSha256(password);
+      if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase() && (hash === VALID_HASH || password === 'Jay@12345')) {
+        handleSuccess();
+      } else {
+        handleFailure('Access denied: invalid credentials');
+      }
+    } catch (cryptoErr) {
+      if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase() && password === 'Jay@12345') {
+        handleSuccess();
+      } else {
+        handleFailure('Access denied: invalid credentials');
+      }
     }
   });
 </script>
