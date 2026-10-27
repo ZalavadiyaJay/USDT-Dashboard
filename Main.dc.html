@@ -132,7 +132,7 @@
 </div>
 <div style="background: rgba(6, 60, 56, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 14px; padding: 18px 18px">
 <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #CCFBF1">Total USDT mined</div>
-<div id="statTotalMined" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">3.20 <span style="font-size: 15px; font-weight: 600; color: #CCFBF1">USDT</span></div>
+<div id="statTotalMined" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">3.70 <span style="font-size: 15px; font-weight: 600; color: #CCFBF1">USDT</span></div>
 <div style="margin-top: 6px; font-size: 13px; color: #CCFBF1">All time</div>
 </div>
 </div>
@@ -412,18 +412,20 @@
 <script>
 (function() {
   const DEFAULT_USERS = [
-    { id: 'user_dakochako504_at_gmail_com', name: 'Dako Chako', initials: 'DC', email: 'dakochako504@gmail.com', cc: 'US', wallet: 'TR7NHqJEkQW6ffHqYgPPjP4pZ98X3hK8kXp9w', balance: '2.100000', balanceNum: 2.10, createdAtMs: Date.now() - 3600000, rig: 'Starter Free', rigBg: '#F1F5F9', rigFg: '#475569', sessions: 1, completedSessionsToday: 1, isMining: false, isMinedToday: true, lastMinedTimestamp: 1793083240784, joined: '27 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
+    { id: 'user_dakochako504_at_gmail_com', name: 'Dako Chako', initials: 'DC', email: 'dakochako504@gmail.com', cc: 'US', wallet: 'TR7NHqJEkQW6ffHqYgPPjP4pZ98X3hK8kXp9w', balance: '2.600000', balanceNum: 2.60, createdAtMs: Date.now() - 3600000, rig: 'Starter Free', rigBg: '#F1F5F9', rigFg: '#475569', sessions: 1, completedSessionsToday: 1, isMining: false, isMinedToday: true, lastMinedTimestamp: 1793083240784, joined: '27 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
     { id: 'user_dakochako505_at_gmail_com', name: 'Dako Chako', initials: 'DC', email: 'dakochako505@gmail.com', cc: 'US', wallet: 'TR7NHqJEkQW6ffHqYgPPjP4pZ98X3hK8kXp9w', balance: '1.100000', balanceNum: 1.10, createdAtMs: Date.now() - 86400000, rig: 'Starter Free', rigBg: '#F1F5F9', rigFg: '#475569', sessions: 0, completedSessionsToday: 0, isMining: false, isMinedToday: false, lastMinedTimestamp: 0, joined: '25 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' }
   ];
 
   let cachedUsers = DEFAULT_USERS.slice();
   let cachedWithdrawals = [];
 
-  const STATS_CACHE_KEY = 'usdt_admin_stats_v3';
-  const USERS_CACHE_KEY = 'usdt_admin_users_v3';
+  const STATS_CACHE_KEY = 'usdt_admin_stats_v4';
+  const USERS_CACHE_KEY = 'usdt_admin_users_v4';
   try {
     localStorage.removeItem('usdt_admin_stats_v2');
     localStorage.removeItem('usdt_admin_users_v2');
+    localStorage.removeItem('usdt_admin_stats_v3');
+    localStorage.removeItem('usdt_admin_users_v3');
   } catch (e) {}
   const DATE_FILTER_KEY = 'usdt_admin_global_date_filter';
 

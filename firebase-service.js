@@ -117,9 +117,51 @@ function normalizeFirestoreUser(docId, d) {
 }
 
 /**
+ * Unwraps Firestore REST API fields object into a standard key-value map
+ */
+function unwrapFirestoreRestFields(fields) {
+  if (!fields) return {};
+  const out = {};
+  for (const key in fields) {
+    const valObj = fields[key];
+    if (valObj.stringValue !== undefined) out[key] = valObj.stringValue;
+    else if (valObj.doubleValue !== undefined) out[key] = parseFloat(valObj.doubleValue);
+    else if (valObj.integerValue !== undefined) out[key] = parseInt(valObj.integerValue, 10);
+    else if (valObj.booleanValue !== undefined) out[key] = valObj.booleanValue;
+    else if (valObj.timestampValue !== undefined) out[key] = new Date(valObj.timestampValue).getTime();
+  }
+  return out;
+}
+
+/**
+ * Direct HTTPS REST fetch for users (guaranteed 0ms to 100ms sync without WebChannel lag)
+ */
+function fetchFirestoreUsersDirect(callback) {
+  const url = 'https://firestore.googleapis.com/v1/projects/usdt-cloud-mining-c0fb3/databases/(default)/documents/users';
+  if (typeof fetch !== 'function') return;
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      const docs = data.documents || [];
+      const liveUsers = docs.map(doc => {
+        const docId = doc.name.split('/').pop();
+        const rawFields = unwrapFirestoreRestFields(doc.fields);
+        return normalizeFirestoreUser(docId, rawFields);
+      });
+      if (callback && liveUsers.length > 0) {
+        callback(liveUsers);
+      }
+    })
+    .catch(err => {
+      console.log('Direct REST users fetch:', err.message);
+    });
+}
+
+/**
  * Real-time listener for the mobile app's "users" collection
  */
 function initLiveFirebaseSync(onUsersUpdate) {
+  fetchFirestoreUsersDirect(onUsersUpdate);
   if (!firestoreDb) return;
 
   try {
@@ -236,9 +278,30 @@ function rejectWithdrawalInFirebase(docId, reason, callback) {
  * Real-time overall stats aggregator for Overview dashboard
  */
 function initDashboardStatsSync(onStatsUpdate) {
-  if (!firestoreDb) return;
-
   let currentRawUsers = [];
+  let currentRawWithdrawals = [];
+  let totalMinedSum = 0;
+  let activeMiners = 0;
+  let mrrSum = 0;
+
+  fetchFirestoreUsersDirect(function(liveUsers) {
+    if (!liveUsers || liveUsers.length === 0) return;
+    currentRawUsers = liveUsers;
+    totalMinedSum = 0;
+    activeMiners = 0;
+    mrrSum = 0;
+    liveUsers.forEach(u => {
+      totalMinedSum += (u.balanceNum || 0);
+      if (u.isMining || u.isMinedToday) activeMiners++;
+      const rig = (u.rig || '').toLowerCase();
+      if (rig.includes('enterprise')) mrrSum += 14.99;
+      else if (rig.includes('pro')) mrrSum += 9.99;
+      else if (rig.includes('starter') && !rig.includes('free')) mrrSum += 4.99;
+    });
+    dispatch();
+  });
+
+  if (!firestoreDb) return;
   let currentRawWithdrawals = [];
   let totalMinedSum = 0;
   let activeMiners = 0;
