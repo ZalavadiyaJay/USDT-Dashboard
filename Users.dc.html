@@ -429,66 +429,114 @@ Mining Active
     }
   };
 
-  const drawer = document.getElementById('userDetailDrawer');
-  const backdrop = document.getElementById('drawerBackdrop');
-  const closeBtn = document.getElementById('closeDrawerBtn');
+  const listView = document.getElementById('users-list-view');
+  const detailView = document.getElementById('user-details-view');
+  const backBtn = document.getElementById('back-to-users-btn');
 
-  function openDrawer(email) {
+  function showUserDetails(email) {
     const u = userDetailsMap[email];
-    if (!u || !drawer || !backdrop) return;
+    if (!u || !listView || !detailView) return;
 
-    document.getElementById('drawerAvatar').textContent = u.initials;
-    document.getElementById('drawerAvatar').style.background = u.rigBg;
-    document.getElementById('drawerAvatar').style.color = u.rigFg;
-    document.getElementById('drawerName').textContent = u.name;
-    document.getElementById('drawerEmail').textContent = u.email;
-    document.getElementById('drawerJoined').textContent = u.joined;
-    document.getElementById('drawerBalance').textContent = u.balance + ' USDT';
-    document.getElementById('drawerRig').textContent = u.rig;
-    document.getElementById('drawerRig').style.background = u.rigBg;
-    document.getElementById('drawerRig').style.color = u.rigFg;
-    document.getElementById('drawerHashrate').textContent = u.hashrate;
-    document.getElementById('drawerSessions').textContent = u.sessions;
-    document.getElementById('drawerDailyProd').textContent = u.dailyProd;
-    document.getElementById('drawerStatus').textContent = u.status;
-    document.getElementById('drawerStatus').style.background = u.statusBg;
-    document.getElementById('drawerStatus').style.color = u.statusFg;
-    document.getElementById('drawerCountry').textContent = u.cc;
-    document.getElementById('drawerWallet').textContent = u.wallet;
+    const bName = document.getElementById('detail-breadcrumb-name');
+    if (bName) bName.textContent = u.name;
 
-    const histList = document.getElementById('drawerHistoryList');
-    if (histList) {
-      histList.innerHTML = (u.history || []).map(h => `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-top: 1px solid #E2E8F0; font-size: 13px">
-          <div>
-            <div style="font-weight: 600; color: #0F172A">${h.start}</div>
-            <div style="font-size: 11px; color: #64748B">${h.duration}</div>
-          </div>
-          <div style="text-align: right">
-            <div style="font-weight: 700; color: #0F766E">${h.reward} USDT</div>
-            <div style="font-size: 11px; color: #166534">${h.status}</div>
-          </div>
-        </div>
-      `).join('');
+    const av = document.getElementById('detail-avatar');
+    if (av) {
+      av.textContent = u.initials;
+      av.style.background = u.rigBg || '#CCFBF1';
+      av.style.color = u.rigFg || '#115E59';
     }
 
-    backdrop.style.display = 'block';
-    drawer.style.display = 'flex';
+    const dName = document.getElementById('detail-name');
+    if (dName) dName.textContent = u.name;
+
+    const dEmail = document.getElementById('detail-email');
+    if (dEmail) dEmail.textContent = u.email;
+
+    const dCountry = document.getElementById('detail-country');
+    if (dCountry) dCountry.textContent = u.cc || 'United States (US)';
+
+    const dJoined = document.getElementById('detail-joined');
+    if (dJoined) dJoined.textContent = u.joined;
+
+    const dRig = document.getElementById('detail-rig-badge');
+    if (dRig) {
+      dRig.textContent = u.rig;
+      dRig.style.background = u.rigBg || '#CCFBF1';
+      dRig.style.color = u.rigFg || '#115E59';
+    }
+
+    const dSpeed = document.getElementById('detail-rig-speed');
+    if (dSpeed) dSpeed.textContent = u.hashrate;
+
+    const dSessions = document.getElementById('detail-sessions');
+    if (dSessions) dSessions.textContent = u.sessions + ' sessions';
+
+    const dDaily = document.getElementById('detail-daily-prod');
+    if (dDaily) dDaily.textContent = u.dailyProd;
+
+    const dBal = document.getElementById('detail-balance');
+    if (dBal) dBal.innerHTML = u.balance + ' <span style="font-size: 15px; font-weight: 600; color: #0F766E">USDT</span>';
+
+    const dWallet = document.getElementById('detail-wallet');
+    if (dWallet) dWallet.textContent = u.wallet;
+
+    const sessTbody = document.getElementById('detail-sessions-tbody');
+    if (sessTbody) {
+      if (u.history && u.history.length > 0) {
+        sessTbody.innerHTML = u.history.map((h, idx) => `
+          <tr style="border-top: 1px solid #E2E8F0">
+            <td style="padding: 12px 14px 12px 20px; font-weight: 600">${idx + 1}</td>
+            <td style="padding: 12px 14px; color: #334155">${h.start}</td>
+            <td style="padding: 12px 14px; color: #334155">${h.end}</td>
+            <td style="padding: 12px 14px; color: #64748B">${h.duration}</td>
+            <td style="padding: 12px 14px; text-align: right; font-weight: 700; color: #0F766E">${h.reward} USDT</td>
+            <td style="padding: 12px 20px 12px 14px"><span style="display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; background: #DCFCE7; color: #166534">${h.status}</span></td>
+          </tr>
+        `).join('');
+      } else {
+        sessTbody.innerHTML = `
+          <tr style="border-top: 1px solid #E2E8F0">
+            <td colspan="6" style="padding: 24px; text-align: center; color: #64748B">No mining sessions recorded yet for this user.</td>
+          </tr>
+        `;
+      }
+    }
+
+    listView.style.display = 'none';
+    detailView.style.display = 'flex';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function closeDrawer() {
-    if (backdrop) backdrop.style.display = 'none';
-    if (drawer) drawer.style.display = 'none';
+  function hideUserDetails() {
+    if (detailView) detailView.style.display = 'none';
+    if (listView) listView.style.display = 'flex';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-  if (backdrop) backdrop.addEventListener('click', closeDrawer);
+  if (backBtn) backBtn.addEventListener('click', hideUserDetails);
+
+  const copyWalletBtn = document.getElementById('copy-detail-wallet-btn');
+  if (copyWalletBtn) {
+    copyWalletBtn.addEventListener('click', function() {
+      const wEl = document.getElementById('detail-wallet');
+      if (wEl && navigator.clipboard) {
+        navigator.clipboard.writeText(wEl.textContent.trim()).then(function() {
+          alert('Wallet address copied to clipboard!');
+        });
+      }
+    });
+  }
 
   document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.view-detail-btn');
     const row = e.target.closest('.user-table-row');
-    if (row) {
-      const email = row.getAttribute('data-user-email');
-      if (email) openDrawer(email);
+    if (btn || row) {
+      const targetRow = btn ? btn.closest('.user-table-row') : row;
+      if (targetRow) {
+        const email = targetRow.getAttribute('data-user-email');
+        if (email) showUserDetails(email);
+      }
     }
   });
 
