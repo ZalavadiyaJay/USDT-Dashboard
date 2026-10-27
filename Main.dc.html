@@ -416,7 +416,7 @@
     { id: 'user_alex', name: 'Alex Morgan', initials: 'AM', email: 'alex.morgan@gmail.com', cc: 'IN', wallet: 'TR7NHq...1aB2', balance: '185.750000', balanceNum: 185.75, createdAtMs: Date.now() - 5*86400000, rig: 'Pro Rig', rigBg: '#CCFBF1', rigFg: '#115E59', sessions: 19, joined: '21 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
     { id: 'user_kenji', name: 'Kenji Sato', initials: 'KS', email: 'kenji.sato@tokyomining.jp', cc: 'JP', wallet: 'TR7NHq...9zK1', balance: '43.600000', balanceNum: 43.60, createdAtMs: Date.now() - 4*86400000, rig: 'Starter Rig', rigBg: '#F0FDFA', rigFg: '#0F766E', sessions: 12, joined: '22 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
     { id: 'user_priya', name: 'Priya Patel', initials: 'PP', email: 'priya.patel@cryptoindia.in', cc: 'IN', wallet: 'TR7NHq...3mN4', balance: '15.200000', balanceNum: 15.20, createdAtMs: Date.now() - 3*86400000, rig: 'Starter Rig', rigBg: '#F0FDFA', rigFg: '#0F766E', sessions: 7, joined: '23 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
-    { id: 'user_dako', name: 'Dako Chako', initials: 'DC', email: 'dakochako505@gmail.com', cc: 'US', wallet: 'TR7NHqJEkQW6ffHqYgPPjP4pZ98X3hK8kXp9w', balance: '1.100000', balanceNum: 1.10, createdAtMs: Date.now() - 1*86400000, rig: 'Starter Free', rigBg: '#F1F5F9', rigFg: '#475569', sessions: 2, joined: '25 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' }
+    { id: 'user_dako', name: 'Dako Chako', initials: 'DC', email: 'dakochako504@gmail.com', cc: 'US', wallet: 'TR7NHqJEkQW6ffHqYgPPjP4pZ98X3hK8kXp9w', balance: '2.100000', balanceNum: 2.10, createdAtMs: Date.now() - 1*86400000, rig: 'Starter Free', rigBg: '#F1F5F9', rigFg: '#475569', sessions: 1, completedSessionsToday: 1, isMining: false, isMinedToday: true, lastMinedTimestamp: 1793083240784, joined: '25 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' }
   ];
 
   let cachedUsers = DEFAULT_USERS.slice();
@@ -1166,11 +1166,11 @@
     }
     if (sCached) {
       const parsed = JSON.parse(sCached);
-      if (parsed.totalUsers) {
+      if (parsed.totalUsers !== undefined && parsed.totalUsers !== null) {
         const el = document.getElementById('statTotalUsers');
         if (el) el.textContent = parsed.totalUsers;
       }
-      if (parsed.activeMiners) {
+      if (parsed.activeMiners !== undefined && parsed.activeMiners !== null) {
         const el = document.getElementById('statActiveMiners');
         if (el) el.textContent = parsed.activeMiners;
         const elToday = document.getElementById('statActiveMinersToday');
@@ -1264,7 +1264,7 @@
       try {
         localStorage.setItem(STATS_CACHE_KEY, JSON.stringify({
           totalUsers: cachedUsers.length,
-          activeMiners: cachedUsers.filter(u => u.status === 'Active').length,
+          activeMiners: cachedUsers.filter(u => u.isMining === true || u.isMinedToday === true).length,
           totalMinedUsdt: stats.totalMinedUsdt,
           mrr: stats.mrr
         }));

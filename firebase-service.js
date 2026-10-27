@@ -80,7 +80,8 @@ function normalizeFirestoreUser(docId, d) {
     if (lastMined > 0) {
       const lastDate = new Date(lastMined);
       const todayDate = new Date();
-      return lastDate.toDateString() === todayDate.toDateString();
+      if (lastDate.toDateString() === todayDate.toDateString()) return true;
+      if (Math.abs(Date.now() - lastMined) < 24 * 3600 * 1000) return true;
     }
     return false;
   })();
@@ -250,7 +251,7 @@ function initDashboardStatsSync(onStatsUpdate) {
 
     onStatsUpdate({
       totalUsers: currentRawUsers.length,
-      activeMiners: activeMiners || currentRawUsers.filter(u => u.status === 'Active').length,
+      activeMiners: currentRawUsers.filter(u => u.isMining === true || u.isMinedToday === true).length,
       totalMinedUsdt: totalMinedSum.toFixed(2),
       mrr: mrrSum.toFixed(2),
       pendingWithdrawalsCount: pendingWds.length,
@@ -270,16 +271,18 @@ function initDashboardStatsSync(onStatsUpdate) {
 
       userSnap.forEach((doc) => {
         const d = doc.data();
-        const bal = parseFloat(d.balanceUsdt || d.balance || 0);
-        totalMinedSum += bal;
-        if (!d.isSuspended) activeMiners++;
+        const normUser = normalizeFirestoreUser(doc.id, d);
+        currentRawUsers.push(normUser);
+        totalMinedSum += (normUser.balanceNum || 0);
 
-        const rig = (d.activeRig || '').toLowerCase();
+        if (normUser.isMining || normUser.isMinedToday) {
+          activeMiners++;
+        }
+
+        const rig = (normUser.rig || '').toLowerCase();
         if (rig.includes('enterprise')) mrrSum += 14.99;
         else if (rig.includes('pro')) mrrSum += 9.99;
         else if (rig.includes('starter') && !rig.includes('free')) mrrSum += 4.99;
-
-        currentRawUsers.push(normalizeFirestoreUser(doc.id, d));
       });
 
       dispatch();
