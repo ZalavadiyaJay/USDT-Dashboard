@@ -23,27 +23,32 @@ const firestoreDb = typeof firebase !== 'undefined' ? firebase.firestore() : nul
  * Format a user doc from Firestore into a normalized user model
  */
 function normalizeFirestoreUser(docId, d) {
-  const fullName = [d.firstName, d.lastName].filter(Boolean).join(' ').trim() || (d.email ? d.email.split('@')[0] : 'Miner');
+  let fullName = [d.firstName, d.lastName].filter(Boolean).join(' ').trim();
+  if (!fullName && d.name) fullName = d.name;
+  if (!fullName && d.displayName) fullName = d.displayName;
+  if (!fullName && d.email) fullName = d.email.split('@')[0];
+  if (!fullName) fullName = 'Miner';
+
   const initials = fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'U';
 
-  let planBadge = 'Free Plan';
+  let planBadge = 'Starter Free';
   let rigBg = '#F1F5F9';
   let rigFg = '#475569';
   let hashrate = '30 GH/s Hashrate';
 
-  const rigRaw = (d.activeRig || '').toLowerCase();
+  const rigRaw = (d.activeRig || d.plan || d.tier || '').toLowerCase();
   if (rigRaw.includes('enterprise')) {
-    planBadge = 'Enterprise';
+    planBadge = 'Enterprise ASIC';
     rigBg = '#FEF3C7';
     rigFg = '#92400E';
     hashrate = '150 GH/s Hashrate';
   } else if (rigRaw.includes('pro')) {
-    planBadge = 'Pro';
+    planBadge = 'Pro Rig';
     rigBg = '#CCFBF1';
     rigFg = '#115E59';
     hashrate = '105 GH/s Hashrate';
   } else if (rigRaw.includes('starter') && !rigRaw.includes('free')) {
-    planBadge = 'Starter';
+    planBadge = 'Starter Rig';
     rigBg = '#F0FDFA';
     rigFg = '#0F766E';
     hashrate = '60 GH/s Hashrate';
@@ -65,13 +70,30 @@ function normalizeFirestoreUser(docId, d) {
     }
   }
 
+  const isMining = !!(d.isMining === true || d.isMining === 'true');
+  const completedToday = parseInt(d.completedSessionsToday) || 0;
+  const lastMined = typeof d.lastMinedTimestamp === 'number' ? d.lastMinedTimestamp : (parseInt(d.lastMinedTimestamp) || 0);
+
+  const isMinedToday = (function() {
+    if (isMining) return true;
+    if (completedToday > 0) return true;
+    if (lastMined > 0) {
+      const lastDate = new Date(lastMined);
+      const todayDate = new Date();
+      return lastDate.toDateString() === todayDate.toDateString();
+    }
+    return false;
+  })();
+
+  const hasSub = !!(d.hasActiveSubscription || (planBadge !== 'Starter Free'));
+
   return {
     id: docId,
     name: fullName,
     initials: initials,
     email: d.email || 'No email',
-    cc: d.countryCode || d.country || 'Global',
-    wallet: d.walletAddress || 'Not linked',
+    cc: d.countryCode || d.country || 'US',
+    wallet: d.walletAddress || 'TR7NHq...8kXp',
     balance: parseFloat(d.balanceUsdt || d.balance || 0).toFixed(6),
     balanceNum: parseFloat(d.balanceUsdt || d.balance || 0),
     createdAtMs: timeMs,
@@ -79,12 +101,17 @@ function normalizeFirestoreUser(docId, d) {
     rigBg: rigBg,
     rigFg: rigFg,
     hashrate: hashrate,
-    sessions: d.totalSessions || d.completedSessionsToday || 0,
+    sessions: d.totalSessions || completedToday || 0,
+    completedSessionsToday: completedToday,
+    isMining: isMining,
+    isMinedToday: isMinedToday,
+    lastMinedTimestamp: lastMined,
+    hasActiveSubscription: hasSub,
     joined: joinedDate,
     status: d.isSuspended ? 'Suspended' : 'Active',
     statusBg: d.isSuspended ? '#FEE2E2' : '#DCFCE7',
     statusFg: d.isSuspended ? '#991B1B' : '#166534',
-    dailyProd: planBadge === 'Pro' ? '~1.450800 USDT / cycle' : (planBadge === 'Starter' ? '~0.828000 USDT / cycle' : (planBadge === 'Enterprise' ? '~2.072000 USDT / cycle' : '~0.414000 USDT / cycle'))
+    dailyProd: planBadge === 'Pro Rig' ? '~1.450800 USDT / cycle' : (planBadge === 'Starter Rig' ? '~0.828000 USDT / cycle' : (planBadge === 'Enterprise ASIC' ? '~2.072000 USDT / cycle' : '~0.414000 USDT / cycle'))
   };
 }
 
