@@ -117,22 +117,22 @@
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px">
 <div style="background: rgba(6, 60, 56, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 14px; padding: 18px 18px">
 <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #CCFBF1">Total users</div>
-<div id="statTotalUsers" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">5</div>
+<div id="statTotalUsers" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">2</div>
 <div style="margin-top: 6px; font-size: 13px; color: #CCFBF1">100% verified miners</div>
 </div>
 <div style="background: rgba(6, 60, 56, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 14px; padding: 18px 18px">
 <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #CCFBF1">Active miners</div>
-<div id="statActiveMiners" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">0</div>
+<div id="statActiveMiners" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">1</div>
 <div style="margin-top: 6px; font-size: 13px; color: #CCFBF1">Active now</div>
 </div>
 <div style="background: rgba(6, 60, 56, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 14px; padding: 18px 18px">
 <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #CCFBF1">Monthly MRR</div>
-<div id="statMonthlyMRR" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">$34.96</div>
+<div id="statMonthlyMRR" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">$0.00</div>
 <div style="margin-top: 6px; font-size: 13px; color: #CCFBF1">Google Play subscriptions</div>
 </div>
 <div style="background: rgba(6, 60, 56, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 14px; padding: 18px 18px">
 <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #CCFBF1">Total USDT mined</div>
-<div id="statTotalMined" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">764.55 <span style="font-size: 15px; font-weight: 600; color: #CCFBF1">USDT</span></div>
+<div id="statTotalMined" style="margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; white-space: nowrap">3.20 <span style="font-size: 15px; font-weight: 600; color: #CCFBF1">USDT</span></div>
 <div style="margin-top: 6px; font-size: 13px; color: #CCFBF1">All time</div>
 </div>
 </div>
@@ -148,7 +148,7 @@
 <span id="minersChartPeriodBadge" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #0F766E; background: #F0FDFA; border: 1px solid #CCFBF1">Last 7 days</span>
 </div>
 <div style="display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 13px; color: #334155">
-<span style="display: inline-flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 3px; background: #0D9488"></span>Active miners today <strong id="statActiveMinersToday" style="color: #0F172A">0</strong></span>
+<span style="display: inline-flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 3px; background: #0D9488"></span>Active miners today <strong id="statActiveMinersToday" style="color: #0F172A">1</strong></span>
 <span style="display: inline-flex; align-items: center; gap: 6px; color: #166534; font-size: 12px; font-weight: 600"><span style="background: #DCFCE7; padding: 2px 6px; border-radius: 4px">+20.3% vs last week</span></span>
 </div>
 <!-- Active Miners Chart -->
@@ -412,18 +412,19 @@
 <script>
 (function() {
   const DEFAULT_USERS = [
-    { id: 'user_marcus', name: 'Marcus Vance', initials: 'MV', email: 'marcus.vance@techcorp.io', cc: 'GB', wallet: 'TR7NHq...8kXp', balance: '520.000000', balanceNum: 520.00, createdAtMs: Date.now() - 6*86400000, rig: 'Enterprise ASIC', rigBg: '#FEF3C7', rigFg: '#92400E', sessions: 28, joined: '20 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
-    { id: 'user_alex', name: 'Alex Morgan', initials: 'AM', email: 'alex.morgan@gmail.com', cc: 'IN', wallet: 'TR7NHq...1aB2', balance: '185.750000', balanceNum: 185.75, createdAtMs: Date.now() - 5*86400000, rig: 'Pro Rig', rigBg: '#CCFBF1', rigFg: '#115E59', sessions: 19, joined: '21 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
-    { id: 'user_kenji', name: 'Kenji Sato', initials: 'KS', email: 'kenji.sato@tokyomining.jp', cc: 'JP', wallet: 'TR7NHq...9zK1', balance: '43.600000', balanceNum: 43.60, createdAtMs: Date.now() - 4*86400000, rig: 'Starter Rig', rigBg: '#F0FDFA', rigFg: '#0F766E', sessions: 12, joined: '22 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
-    { id: 'user_priya', name: 'Priya Patel', initials: 'PP', email: 'priya.patel@cryptoindia.in', cc: 'IN', wallet: 'TR7NHq...3mN4', balance: '15.200000', balanceNum: 15.20, createdAtMs: Date.now() - 3*86400000, rig: 'Starter Rig', rigBg: '#F0FDFA', rigFg: '#0F766E', sessions: 7, joined: '23 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
-    { id: 'user_dako', name: 'Dako Chako', initials: 'DC', email: 'dakochako504@gmail.com', cc: 'US', wallet: 'TR7NHqJEkQW6ffHqYgPPjP4pZ98X3hK8kXp9w', balance: '2.100000', balanceNum: 2.10, createdAtMs: Date.now() - 1*86400000, rig: 'Starter Free', rigBg: '#F1F5F9', rigFg: '#475569', sessions: 1, completedSessionsToday: 1, isMining: false, isMinedToday: true, lastMinedTimestamp: 1793083240784, joined: '25 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' }
+    { id: 'user_dakochako504_at_gmail_com', name: 'Dako Chako', initials: 'DC', email: 'dakochako504@gmail.com', cc: 'US', wallet: 'TR7NHqJEkQW6ffHqYgPPjP4pZ98X3hK8kXp9w', balance: '2.100000', balanceNum: 2.10, createdAtMs: Date.now() - 3600000, rig: 'Starter Free', rigBg: '#F1F5F9', rigFg: '#475569', sessions: 1, completedSessionsToday: 1, isMining: false, isMinedToday: true, lastMinedTimestamp: 1793083240784, joined: '27 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' },
+    { id: 'user_dakochako505_at_gmail_com', name: 'Dako Chako', initials: 'DC', email: 'dakochako505@gmail.com', cc: 'US', wallet: 'TR7NHqJEkQW6ffHqYgPPjP4pZ98X3hK8kXp9w', balance: '1.100000', balanceNum: 1.10, createdAtMs: Date.now() - 86400000, rig: 'Starter Free', rigBg: '#F1F5F9', rigFg: '#475569', sessions: 0, completedSessionsToday: 0, isMining: false, isMinedToday: false, lastMinedTimestamp: 0, joined: '25 Oct 2026', status: 'Active', statusBg: '#DCFCE7', statusFg: '#166534' }
   ];
 
   let cachedUsers = DEFAULT_USERS.slice();
   let cachedWithdrawals = [];
 
-  const STATS_CACHE_KEY = 'usdt_admin_stats_v2';
-  const USERS_CACHE_KEY = 'usdt_admin_users_v2';
+  const STATS_CACHE_KEY = 'usdt_admin_stats_v3';
+  const USERS_CACHE_KEY = 'usdt_admin_users_v3';
+  try {
+    localStorage.removeItem('usdt_admin_stats_v2');
+    localStorage.removeItem('usdt_admin_users_v2');
+  } catch (e) {}
   const DATE_FILTER_KEY = 'usdt_admin_global_date_filter';
 
   // Master Global Date Filter (restored from localStorage if available)

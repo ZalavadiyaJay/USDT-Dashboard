@@ -103,11 +103,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 <section aria-label="Revenue summary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
 <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 18px 20px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04)">
 <div style="font-size: 13px; font-weight: 500; color: #64748B">Monthly MRR</div>
-<div id="subMonthlyMRR" style="margin-top: 8px; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">$34.96</div>
+<div id="subMonthlyMRR" style="margin-top: 8px; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">$0.00</div>
 </div>
 <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 18px 20px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04)">
 <div style="font-size: 13px; font-weight: 500; color: #64748B">Paid VIP miners</div>
-<div id="subPaidCount" style="margin-top: 8px; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">4</div>
+<div id="subPaidCount" style="margin-top: 8px; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">0</div>
 </div>
 <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 18px 20px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04)">
 <div style="font-size: 13px; font-weight: 500; color: #64748B">Most popular plan</div>
@@ -222,78 +222,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 </tr>
 </thead>
 <tbody id="subTableBody">
-<tr class="sub-row" data-plan="enterprise" style="border-top: 1px solid #E2E8F0">
-<td style="padding: 12px 8px 12px 20px">
-<div style="display: flex; align-items: center; gap: 12px">
-<span aria-hidden="true" style="flex: none; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 999px; background: #FEF3C7; color: #92400E; font-size: 12px; font-weight: 700">MV</span>
-<div style="min-width: 0">
-<div style="font-weight: 600">Marcus Vance</div>
-<div style="font-size: 12px; color: #64748B">marcus.vance@techcorp.io</div>
-</div>
-</div>
+<tr style="border-top: 1px solid #E2E8F0">
+<td colspan="6" style="padding: 32px 20px; text-align: center; color: #64748B; font-size: 14px">
+No active paid VIP subscriptions yet. All registered miners are currently on the Starter Free tier.
 </td>
-<td style="padding: 12px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: #FEF3C7; color: #92400E">Enterprise ASIC</span></td>
-<td style="padding: 12px 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: #334155">gpa.9Vc5...q82Ne</td>
-<td style="padding: 12px 8px; color: #334155; white-space: nowrap">15 Oct 2026</td>
-<td style="padding: 12px 8px; color: #334155; white-space: nowrap">15 Nov 2026</td>
-<td style="padding: 12px 20px 12px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: #DCFCE7; color: #166534">Auto-renew on</span></td>
-</tr>
-
-<tr class="sub-row" data-plan="pro" style="border-top: 1px solid #E2E8F0">
-<td style="padding: 12px 8px 12px 20px">
-<div style="display: flex; align-items: center; gap: 12px">
-<span aria-hidden="true" style="flex: none; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 999px; background: #CCFBF1; color: #115E59; font-size: 12px; font-weight: 700">AM</span>
-<div style="min-width: 0">
-<div style="font-weight: 600">Alex Morgan</div>
-<div style="font-size: 12px; color: #64748B">alex.morgan@gmail.com</div>
-</div>
-</div>
-</td>
-<td style="padding: 12px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: #CCFBF1; color: #115E59">Pro Rig</span></td>
-<td style="padding: 12px 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: #334155">gpa.7Kq2...x41Ra</td>
-<td style="padding: 12px 8px; color: #334155; white-space: nowrap">20 Oct 2026</td>
-<td style="padding: 12px 8px; color: #334155; white-space: nowrap">20 Nov 2026</td>
-<td style="padding: 12px 20px 12px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: #DCFCE7; color: #166534">Auto-renew on</span></td>
-</tr>
-
-<tr class="sub-row" data-plan="starter" style="border-top: 1px solid #E2E8F0">
-<td style="padding: 12px 8px 12px 20px">
-<div style="display: flex; align-items: center; gap: 12px">
-<span aria-hidden="true" style="flex: none; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 999px; background: #F0FDFA; color: #0F766E; font-size: 12px; font-weight: 700">KS</span>
-<div style="min-width: 0">
-<div style="font-weight: 600">Kenji Sato</div>
-<div style="font-size: 12px; color: #64748B">kenji.sato@tokyomining.jp</div>
-</div>
-</div>
-</td>
-<td style="padding: 12px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: #F0FDFA; color: #0F766E">Starter Rig</span></td>
-<td style="padding: 12px 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: #334155">gpa.3Lm9...b07Ts</td>
-<td style="padding: 12px 8px; color: #334155; white-space: nowrap">24 Oct 2026</td>
-<td style="padding: 12px 8px; color: #334155; white-space: nowrap">24 Nov 2026</td>
-<td style="padding: 12px 20px 12px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: #DCFCE7; color: #166534">Auto-renew on</span></td>
-</tr>
-
-<tr class="sub-row" data-plan="starter" style="border-top: 1px solid #E2E8F0">
-<td style="padding: 12px 8px 12px 20px">
-<div style="display: flex; align-items: center; gap: 12px">
-<span aria-hidden="true" style="flex: none; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 999px; background: #F0FDFA; color: #0F766E; font-size: 12px; font-weight: 700">PP</span>
-<div style="min-width: 0">
-<div style="font-weight: 600">Priya Patel</div>
-<div style="font-size: 12px; color: #64748B">priya.patel@cryptoindia.in</div>
-</div>
-</div>
-</td>
-<td style="padding: 12px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: #F0FDFA; color: #0F766E">Starter Rig</span></td>
-<td style="padding: 12px 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: #334155">gpa.1Hd6...m55Zy</td>
-<td style="padding: 12px 8px; color: #334155; white-space: nowrap">22 Oct 2026</td>
-<td style="padding: 12px 8px; color: #334155; white-space: nowrap">22 Nov 2026</td>
-<td style="padding: 12px 20px 12px 8px"><span style="display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: #DCFCE7; color: #166534">Auto-renew on</span></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-top: 1px solid #E2E8F0; font-size: 13px; color: #64748B">
-<span id="subShowingCount">Showing 4 of 4 active VIP subscribers</span>
+<span id="subShowingCount">Showing 0 active VIP subscribers</span>
 </div>
 </section>
 
